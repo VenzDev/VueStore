@@ -1,15 +1,18 @@
 <template>
   <div class="container">
     <SideNavbar />
-    <router-view class="content" />
+    <Wrapper class="content">
+      <router-view />
+    </Wrapper>
   </div>
 </template>
 
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
 import SideNavbar from "@/components/SideNavbar.vue";
+import Wrapper from "@/components/Wrapper";
 
-@Component({ components: { SideNavbar } })
+@Component({ components: { SideNavbar, Wrapper } })
 export default class App extends Vue {}
 </script>
 
@@ -29,6 +32,7 @@ export default class App extends Vue {}
   margin: 0 auto;
 
   & .content {
+    margin-left: 250px;
     flex-basis: 100%;
   }
 }

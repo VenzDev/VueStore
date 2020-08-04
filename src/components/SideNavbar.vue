@@ -5,13 +5,35 @@
     </h3>
     <div class="navbar-list">
       <ul>
-        <li>Shirts <i class="navIcon fa fa-caret-down"></i></li>
-        <li>Dresses <i class="navIcon fa fa-caret-down"></i></li>
-        <li>Jeans <i class="navIcon fa fa-caret-down"></i></li>
-        <li>Jackets <i class="navIcon fa fa-caret-down"></i></li>
-        <li>Gymwear <i class="navIcon fa fa-caret-down"></i></li>
-        <li>Blazers <i class="navIcon fa fa-caret-down"></i></li>
-        <li>Shoes <i class="navIcon fa fa-caret-down"></i></li>
+        <li>
+          <p>Shirts <i class="navIcon fa fa-caret-down"></i></p>
+        </li>
+        <li>
+          <p>Dresses <i class="navIcon fa fa-caret-down"></i></p>
+        </li>
+        <li>
+          <p @click="isJeansOpen = !isJeansOpen">
+            Jeans <i class="navIcon fa fa-caret-down"></i>
+          </p>
+          <div class="subMenu" v-if="isJeansOpen">
+            <p>Skinny</p>
+            <p>Relaxed</p>
+            <p>Bootcut</p>
+            <p>Straight</p>
+          </div>
+        </li>
+        <li>
+          <p>Jackets <i class="navIcon fa fa-caret-down"></i></p>
+        </li>
+        <li>
+          <p>Gymwear <i class="navIcon fa fa-caret-down"></i></p>
+        </li>
+        <li>
+          <p>Blazers <i class="navIcon fa fa-caret-down"></i></p>
+        </li>
+        <li>
+          <p>Shoes <i class="navIcon fa fa-caret-down"></i></p>
+        </li>
       </ul>
     </div>
     <a href="#" class="linkItem u-navElement">Contact</a>
@@ -24,7 +46,9 @@
 import { Vue, Component } from "vue-property-decorator";
 
 @Component
-export default class SideNavbar extends Vue {}
+export default class SideNavbar extends Vue {
+  isJeansOpen = false;
+}
 </script>
 
 <style lang="scss" scoped>
@@ -33,28 +57,41 @@ export default class SideNavbar extends Vue {}
   flex-shrink: 0;
   width: 250px;
   font-family: "Roboto", sans-serif;
+  position: fixed;
+  max-height: 100vh;
+  overflow-y: auto;
 
   & .navbar-list {
     padding: 64px 0;
 
     & li {
-      position: relative;
-      padding: 8px 16px;
       font-size: 18px;
       font-weight: bold;
       line-height: 1.5;
       color: grey;
-      cursor: pointer;
 
-      &:hover {
-        color: black;
-        background-color: #ccc;
+      & p {
+        cursor: pointer;
+        padding: 8px 16px;
+        position: relative;
+
+        &:hover {
+          color: black;
+          background-color: #ccc;
+        }
+        & .navIcon {
+          position: absolute;
+          top: 50%;
+          transform: translateY(-50%);
+          right: 50px;
+        }
       }
-      & .navIcon {
-        position: absolute;
-        top: 50%;
-        transform: translateY(-50%);
-        right: 25px;
+
+      & .subMenu {
+        & p {
+          margin-left: 15px;
+          font-size: 1rem;
+        }
       }
     }
   }
