@@ -18,9 +18,12 @@
             Jeans <i class="navIcon fa fa-caret-down"></i>
           </p>
           <div class="subMenu" v-if="isJeansOpen">
-            <router-link active-class="isActive" to="/jeans/skinny"
-              ><p>Skinny</p></router-link
-            >
+            <router-link active-class="isActive" to="/jeans/skinny">
+              <p @click="handleChange">
+                <i class="subMenuIcon fa fa-caret-right"></i>
+                Skinny
+              </p>
+            </router-link>
             <p>Relaxed</p>
             <p>Bootcut</p>
             <p>Straight</p>
@@ -47,10 +50,11 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component } from "vue-property-decorator";
+import { Vue, Component, Prop } from "vue-property-decorator";
 
 @Component
 export default class SideNavbar extends Vue {
+  @Prop() handleChange!: Function;
   isJeansOpen = false;
 }
 </script>
@@ -108,6 +112,9 @@ export default class SideNavbar extends Vue {
       }
 
       & .subMenu {
+        & .subMenuIcon {
+          display: none;
+        }
         & p {
           margin-left: 15px;
           font-size: 1rem;
@@ -147,5 +154,10 @@ export default class SideNavbar extends Vue {
   display: block;
   color: black;
   background-color: #ccc;
+
+  & .subMenuIcon {
+    margin-right: 5px;
+    display: inline !important;
+  }
 }
 </style>

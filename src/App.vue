@@ -1,6 +1,9 @@
 <template>
   <div class="container">
-    <SideNavbar v-bind:class="{ active: isNavbar }" />
+    <SideNavbar
+      :handleChange="this.handleChange"
+      v-bind:class="{ active: isNavbar }"
+    />
     <header class="headerNav">
       <div class="headerNav-logo">
         <b>LOGO</b>
