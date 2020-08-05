@@ -81,13 +81,15 @@ export default class Jeans extends Vue {}
 .itemsAmount {
   display: block;
   color: grey;
-  margin: 1rem 0;
+
+  font-family: "Roboto", sans-serif;
+  margin: 1rem;
 }
 
 .itemsContainer {
   display: flex;
   flex-wrap: wrap;
-
+  margin: 1rem;
   & div {
     flex-basis: 25%;
     margin-bottom: 20px;

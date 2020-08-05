@@ -2,7 +2,9 @@
   <header class="header">
     <p class="category-title u-Montserrat">{{ path }}</p>
     <p>
-      <i class="fa fa-shopping-cart"></i>
+      <router-link to="/shop-cart">
+        <i class="fa fa-shopping-cart"></i>
+      </router-link>
       <i class="fa fa-search"></i>
     </p>
   </header>
@@ -31,9 +33,11 @@ export default class Header extends Vue {
 
   & i {
     font-size: 24px;
+    transition: 0.2s;
+    margin-right: 1rem;
 
-    &:first-child {
-      margin-right: 16px;
+    &:hover {
+      transform: scale(1.1) rotate(-15deg);
     }
   }
   .category-title {

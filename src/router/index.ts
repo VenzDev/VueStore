@@ -15,6 +15,18 @@ const routes: Array<RouteConfig> = [
     name: "Skinny Jeans",
     component: () =>
       import(/* webpackChunkName: "jeans" */ "../views/Jeans.vue")
+  },
+  {
+    path: "/shop-cart",
+    name: "Shopping Cart",
+    component: () =>
+      import(/* webpackChunkName: "shopCart" */ "../views/ShopCart.vue")
+  },
+  {
+    path: "*",
+    name: "Page Not Found",
+    component: () =>
+      import(/* webpackChunkName: "error" */ "../views/PageNotFound.vue")
   }
 ];
 
