@@ -56,6 +56,10 @@ footer {
   background-color: #f1f1f1;
   padding-top: 2rem;
 
+  @media screen and (max-width: 540px) {
+    justify-items: center;
+  }
+
   h4 {
     padding: 1rem 0;
     font-size: 1.2rem;
@@ -70,6 +74,11 @@ footer {
     flex: 0 0 33.33%;
     padding: 0 1rem;
     text-align: center;
+
+    @media screen and (max-width: 540px) {
+      flex: 1 0 50%;
+    }
+
     input,
     button {
       display: block;
@@ -94,6 +103,10 @@ footer {
     text-align: center;
     padding-bottom: 2rem;
 
+    @media screen and (max-width: 540px) {
+      flex: 1 0 50%;
+    }
+
     & a {
       font-size: 0.8rem;
       padding: 0.5rem;
@@ -104,6 +117,12 @@ footer {
   }
   & .storeInfoContainer {
     flex: 0 0 33.33%;
+
+    @media screen and (max-width: 540px) {
+      flex: 1 0 100%;
+      text-align: center;
+      padding-bottom: 1rem;
+    }
 
     p {
       padding: 0.5rem 0;

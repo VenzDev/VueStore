@@ -58,8 +58,24 @@ export default class SideNavbar extends Vue {
   width: 250px;
   font-family: "Roboto", sans-serif;
   position: fixed;
+  min-height: 100vh;
   max-height: 100vh;
   overflow-y: auto;
+  overflow-x: hidden;
+  z-index: 100;
+  transition: 0.2s;
+
+  &.active {
+    display: block !important;
+    background-color: white;
+
+    min-height: 100vh;
+    width: 250px;
+  }
+
+  @media screen and (max-width: 1000px) {
+    width: 0;
+  }
 
   & .navbar-list {
     padding: 64px 0;

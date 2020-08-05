@@ -99,6 +99,18 @@ export default class Home extends Vue {
     flex-basis: 25%;
     margin-bottom: 20px;
 
+    @media screen and (max-width: 780px) {
+      flex-basis: 33%;
+    }
+
+    @media screen and (max-width: 540px) {
+      flex-basis: 50%;
+    }
+
+    @media screen and (max-width: 400px) {
+      flex-basis: 100%;
+    }
+
     & img {
       width: 100%;
       filter: grayscale(80%);
