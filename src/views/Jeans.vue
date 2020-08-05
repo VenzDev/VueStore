@@ -1,80 +1,50 @@
 <template>
   <div>
-    <p class="itemsAmount">8 Items</p>
-    <section class="itemsContainer">
-      <div>
-        <img
-          src="https://www.w3schools.com//w3images/jeans1.jpg"
-          alt="itemImage"
-        />
-        <p class="itemName">Ripped Skinny Jeans</p>
-        <p class="itemPrice">$24.99</p>
-      </div>
-      <div>
-        <img
-          src="https://www.w3schools.com//w3images/jeans1.jpg"
-          alt="itemImage"
-        />
-        <p class="itemName">Ripped Skinny Jeans</p>
-        <p class="itemPrice">$24.99</p>
-      </div>
-      <div>
-        <img
-          src="https://www.w3schools.com//w3images/jeans1.jpg"
-          alt="itemImage"
-        />
-        <p class="itemName">Ripped Skinny Jeans</p>
-        <p class="itemPrice">$24.99</p>
-      </div>
-      <div>
-        <img
-          src="https://www.w3schools.com//w3images/jeans1.jpg"
-          alt="itemImage"
-        />
-        <p class="itemName">Ripped Skinny Jeans</p>
-        <p class="itemPrice">$24.99</p>
-      </div>
-      <div>
-        <img
-          src="https://www.w3schools.com//w3images/jeans1.jpg"
-          alt="itemImage"
-        />
-        <p class="itemName">Ripped Skinny Jeans</p>
-        <p class="itemPrice">$24.99</p>
-      </div>
-      <div>
-        <img
-          src="https://www.w3schools.com//w3images/jeans1.jpg"
-          alt="itemImage"
-        />
-        <p class="itemName">Ripped Skinny Jeans</p>
-        <p class="itemPrice">$24.99</p>
-      </div>
-      <div>
-        <img
-          src="https://www.w3schools.com//w3images/jeans1.jpg"
-          alt="itemImage"
-        />
-        <p class="itemName">Ripped Skinny Jeans</p>
-        <p class="itemPrice">$24.99</p>
-      </div>
-      <div>
-        <img
-          src="https://www.w3schools.com//w3images/jeans1.jpg"
-          alt="itemImage"
-        />
-        <p class="itemName">Ripped Skinny Jeans</p>
-        <p class="itemPrice">$24.99</p>
-      </div>
-    </section>
+    <div class="spinnerContainer" v-if="isLoading">
+      <LoadingSpinner />
+    </div>
+    <div v-else>
+      <p class="itemsAmount">{{ "Items: " + itemsAmount }}</p>
+      <section class="itemsContainer">
+        <router-link
+          tag="div"
+          :to="'/item/' + item.id"
+          v-for="item in items"
+          :key="item.id"
+        >
+          <div class="imageContainer">
+            <img :src="item.image" alt="itemImage" />
+          </div>
+          <p class="itemName">{{ item.product_name }}</p>
+          <p class="itemPrice">{{ item.price }}</p>
+        </router-link>
+      </section>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
+import { getItems } from "@/store/api";
+import LoadingSpinner from "@/components/LoadingSpinner.vue";
+import ItemModel from "@/store/models/ItemModel";
 
-@Component
-export default class Jeans extends Vue {}
+@Component({ components: { LoadingSpinner } })
+export default class Jeans extends Vue {
+  isLoading = false;
+  items: Array<ItemModel> | null = null;
+
+  get itemsAmount() {
+    if (!this.items) return "Not Found";
+    return this.items.length;
+  }
+
+  async created() {
+    this.isLoading = true;
+    this.items = await getItems();
+    this.isLoading = false;
+  }
+}
 </script>
 
 <style lang="scss" scoped>
@@ -86,16 +56,22 @@ export default class Jeans extends Vue {}
   margin: 1rem;
 }
 
+.spinnerContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 80vh;
+}
 .itemsContainer {
   display: flex;
   flex-wrap: wrap;
   margin: 1rem;
-  & div {
+  & > div {
     flex-basis: 25%;
     margin-bottom: 20px;
 
     @media screen and (max-width: 780px) {
-      flex-basis: 33%;
+      flex-basis: 33.33%;
     }
 
     @media screen and (max-width: 540px) {
@@ -106,14 +82,22 @@ export default class Jeans extends Vue {}
       flex-basis: 100%;
     }
 
-    & img {
-      width: 100%;
-      filter: grayscale(80%);
-      transition: 0.2s;
-      cursor: pointer;
+    &:hover {
+      .imageContainer img {
+        transform: scaleX(1.1);
+      }
+      & p {
+        font-weight: bold;
+      }
+    }
 
-      &:hover {
-        filter: grayscale(0%);
+    & .imageContainer {
+      overflow: hidden;
+      & img {
+        height: auto;
+        width: 100%;
+        transition: 0.2s;
+        cursor: pointer;
       }
     }
 

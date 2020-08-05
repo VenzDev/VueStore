@@ -1,11 +1,11 @@
 <template>
   <div class="container">
     <SideNavbar v-bind:class="{ active: isNavbar }" />
-    <header @click="handleChange" class="headerNav">
+    <header class="headerNav">
       <div class="headerNav-logo">
         <b>LOGO</b>
       </div>
-      <div class="headerNav-hamburger">
+      <div @click="handleChange" class="headerNav-hamburger">
         <i class="fa fa-bars"></i>
       </div>
     </header>

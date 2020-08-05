@@ -23,6 +23,11 @@ const routes: Array<RouteConfig> = [
       import(/* webpackChunkName: "shopCart" */ "../views/ShopCart.vue")
   },
   {
+    path: "/item/:id",
+    name: "Great choice",
+    component: () => import(/* webpackChunkName: "item" */ "../views/Item.vue")
+  },
+  {
     path: "*",
     name: "Page Not Found",
     component: () =>
