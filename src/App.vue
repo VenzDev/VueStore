@@ -27,7 +27,6 @@ export default class App extends Vue {
 
   handleChange() {
     this.isNavbar = !this.isNavbar;
-    console.log(this.isNavbar);
   }
 }
 </script>
@@ -39,6 +38,11 @@ export default class App extends Vue {
   box-sizing: border-box;
   text-decoration: none;
   list-style: none;
+
+  &:visited,
+  &:active {
+    color: inherit;
+  }
 }
 
 .headerNav-logo {

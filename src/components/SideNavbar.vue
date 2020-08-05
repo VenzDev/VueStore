@@ -1,7 +1,9 @@
 <template>
   <nav class="side-navbar">
     <h3 class="side-navbar-logo">
-      <b>LOGO</b>
+      <router-link to="/">
+        <b>LOGO</b>
+      </router-link>
     </h3>
     <div class="navbar-list">
       <ul>
@@ -16,7 +18,9 @@
             Jeans <i class="navIcon fa fa-caret-down"></i>
           </p>
           <div class="subMenu" v-if="isJeansOpen">
-            <p>Skinny</p>
+            <router-link active-class="isActive" to="/jeans/skinny"
+              ><p>Skinny</p></router-link
+            >
             <p>Relaxed</p>
             <p>Bootcut</p>
             <p>Straight</p>
@@ -118,6 +122,7 @@ export default class SideNavbar extends Vue {
     font-size: 24px;
     padding: 10px 0;
     margin: 1rem 0;
+    margin-left: 1rem;
 
     & b {
       letter-spacing: 4px;
@@ -137,5 +142,10 @@ export default class SideNavbar extends Vue {
       color: black;
     }
   }
+}
+.isActive > p {
+  display: block;
+  color: black;
+  background-color: #ccc;
 }
 </style>
