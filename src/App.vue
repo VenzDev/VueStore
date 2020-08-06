@@ -47,7 +47,6 @@ export default class App extends Vue {
     color: inherit;
   }
 }
-
 .headerNav-logo {
   font-family: "Montserrat", sans-serif;
   font-weight: 400;

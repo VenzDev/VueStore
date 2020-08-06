@@ -12,7 +12,9 @@
         <h3>{{ item.price }}</h3>
         <p>{{ item.short_description }}</p>
         <p class="sizeHelp"><i class="fa fa-shirtsinbulk"></i> Size help</p>
-        <button class="u-Roboto">Add to Cart</button>
+        <button @click="handleAddItemToCart" class="u-Roboto">
+          Add to Cart
+        </button>
       </div>
     </div>
   </div>
@@ -23,8 +25,10 @@ import { Vue, Component, Prop } from "vue-property-decorator";
 import { getItem } from "@/store/api";
 import ItemModel from "@/store/models/ItemModel";
 import LoadingSpinner from "@/components/LoadingSpinner.vue";
+import Modal from "@/components/Modal.vue";
+import shopCart from "@/store/modules/shopCart";
 
-@Component({ components: { LoadingSpinner } })
+@Component({ components: { LoadingSpinner, Modal } })
 export default class Item extends Vue {
   item: ItemModel | null = null;
   isLoading = false;
@@ -32,6 +36,10 @@ export default class Item extends Vue {
     this.isLoading = true;
     this.item = await getItem(parseInt(this.$route.params.id));
     this.isLoading = false;
+  }
+
+  handleAddItemToCart() {
+    if (this.item !== null) shopCart.addItem({ item: this.item, quantity: 1 });
   }
 }
 </script>

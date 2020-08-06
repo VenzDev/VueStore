@@ -3,7 +3,11 @@
     <p class="category-title u-Montserrat">{{ path }}</p>
     <p>
       <router-link to="/shop-cart">
-        <i class="fa fa-shopping-cart"></i>
+        <i class="fa fa-shopping-cart">
+          <div v-if="!emptyCart" class="cartQuantity u-Montserrat">
+            {{ cartCount }}
+          </div>
+        </i>
       </router-link>
       <i class="fa fa-search"></i>
     </p>
@@ -11,12 +15,20 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component } from "vue-property-decorator";
+import { Vue, Component, Watch } from "vue-property-decorator";
+import shopCart from "@/store/modules/shopCart";
 
 @Component
 export default class Header extends Vue {
   get path() {
     return this.$route.name;
+  }
+
+  get cartCount() {
+    return shopCart.cartCount;
+  }
+  get emptyCart() {
+    return shopCart.emptyCart;
   }
 }
 </script>
@@ -31,10 +43,27 @@ export default class Header extends Vue {
   align-items: center;
   justify-content: space-between;
 
+  & .cartQuantity {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    position: absolute;
+    top: 50%;
+    right: -50%;
+    z-index: 10;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+
+    background-color: orange;
+  }
+
   & i {
     font-size: 24px;
     transition: 0.2s;
     margin-right: 1rem;
+    position: relative;
 
     &:hover {
       transform: scale(1.1) rotate(-15deg);

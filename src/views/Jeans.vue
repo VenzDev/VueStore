@@ -66,19 +66,21 @@ export default class Jeans extends Vue {
   display: flex;
   flex-wrap: wrap;
   margin: 1rem;
+
   & > div {
     flex-basis: 25%;
+    padding: 5px;
     margin-bottom: 20px;
 
     @media screen and (max-width: 780px) {
       flex-basis: 33.33%;
     }
 
-    @media screen and (max-width: 540px) {
+    @media screen and (max-width: 580px) {
       flex-basis: 50%;
     }
 
-    @media screen and (max-width: 400px) {
+    @media screen and (max-width: 460px) {
       flex-basis: 100%;
     }
 
