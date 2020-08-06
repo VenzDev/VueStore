@@ -15,7 +15,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Watch } from "vue-property-decorator";
+import { Vue, Component } from "vue-property-decorator";
 import shopCart from "@/store/modules/shopCart";
 
 @Component
@@ -23,7 +23,6 @@ export default class Header extends Vue {
   get path() {
     return this.$route.name;
   }
-
   get cartCount() {
     return shopCart.cartCount;
   }

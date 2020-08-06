@@ -33,6 +33,15 @@ class ShopCartModule extends VuexModule {
     return this.cart.length === 0 ? true : false;
   }
 
+  get itemsPrice(): number {
+    let totalPrice = 0;
+    this.cart.forEach(item => {
+      const price = item.item.price.substr(1);
+      totalPrice += item.quantity * parseFloat(price);
+    });
+    return parseFloat(totalPrice.toFixed(2));
+  }
+
   @Mutation
   updateCart(cart: Array<CartItemModel>) {
     this.cart = cart;
@@ -50,6 +59,45 @@ class ShopCartModule extends VuexModule {
       return cart;
     } else {
       cart[index].quantity += item.quantity;
+      return cart;
+    }
+  }
+
+  @Action({ commit: "updateCart" })
+  decrementItemQuantity(id: number) {
+    const cart = this.cart;
+    const index = this.cart.findIndex(cartItem => cartItem.item.id === id);
+
+    if (index === -1) return cart;
+    else {
+      cart[index].quantity--;
+      if (cart[index].quantity === 0) {
+        cart.splice(index, 1);
+      }
+      return cart;
+    }
+  }
+
+  @Action({ commit: "updateCart" })
+  incrementItemQuantity(id: number) {
+    const cart = this.cart;
+    const index = this.cart.findIndex(cartItem => cartItem.item.id === id);
+
+    if (index === -1) return cart;
+    else {
+      cart[index].quantity++;
+      return cart;
+    }
+  }
+
+  @Action({ commit: "updateCart" })
+  removeItem(id: number) {
+    const cart = this.cart;
+    const index = this.cart.findIndex(cartItem => cartItem.item.id === id);
+
+    if (index === -1) return cart;
+    else {
+      cart.splice(index, 1);
       return cart;
     }
   }
