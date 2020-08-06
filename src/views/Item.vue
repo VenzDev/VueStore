@@ -1,5 +1,20 @@
 <template>
   <div class="wrapper">
+    <transition name="fade">
+      <Modal :handleModal="handleModal" v-if="isModalOpen">
+        <div class="modalContainer u-Montserrat">
+          <h2>{{ item.product_name }}</h2>
+          <p>{{ item.price + " per Item" }}</p>
+          <input v-model="quantity" type="number" />
+          <div class="buttons">
+            <button @click="handleModal">Close</button>
+            <button @click="handleAddItemToCart">
+              Add To Cart <i class="fa fa-shopping-cart"></i>
+            </button>
+          </div>
+        </div>
+      </Modal>
+    </transition>
     <div class="spinnerContainer" v-if="isLoading">
       <LoadingSpinner />
     </div>
@@ -12,7 +27,7 @@
         <h3>{{ item.price }}</h3>
         <p>{{ item.short_description }}</p>
         <p class="sizeHelp"><i class="fa fa-shirtsinbulk"></i> Size help</p>
-        <button @click="handleAddItemToCart" class="u-Roboto">
+        <button @click="isModalOpen = !isModalOpen" class="u-Roboto">
           Add to Cart
         </button>
       </div>
@@ -32,6 +47,13 @@ import shopCart from "@/store/modules/shopCart";
 export default class Item extends Vue {
   item: ItemModel | null = null;
   isLoading = false;
+  isModalOpen = false;
+  quantity = "0";
+
+  handleModal() {
+    this.isModalOpen = false;
+  }
+
   async created() {
     this.isLoading = true;
     this.item = await getItem(parseInt(this.$route.params.id));
@@ -39,7 +61,9 @@ export default class Item extends Vue {
   }
 
   handleAddItemToCart() {
-    if (this.item !== null) shopCart.addItem({ item: this.item, quantity: 1 });
+    if (this.item !== null)
+      shopCart.addItem({ item: this.item, quantity: parseInt(this.quantity) });
+    this.handleModal();
   }
 }
 </script>
@@ -48,6 +72,44 @@ export default class Item extends Vue {
 @import "@/styles/_utils.scss";
 .wrapper {
   margin: 1rem;
+}
+.fade-enter-active,
+.fade-leave-active {
+  transition: 0.2s;
+}
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
+}
+.modalContainer {
+  min-width: 350px;
+  & h2,
+  & p {
+    margin-bottom: 1rem;
+  }
+  & input {
+    display: block;
+    font-size: 1rem;
+    margin-bottom: 1rem;
+    border: 1px solid black;
+    padding: 0.5rem;
+  }
+  & .buttons {
+    display: flex;
+
+    & button {
+      flex: 50%;
+      border: none;
+      font-family: "Roboto", sans-serif;
+      font-size: 1rem;
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+    }
+    & button:nth-child(1) {
+      color: white;
+      background-color: black;
+    }
+  }
 }
 .spinnerContainer {
   display: flex;

@@ -5,7 +5,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component } from "vue-property-decorator";
+import { Vue, Component, Prop } from "vue-property-decorator";
 
 @Component
 export default class Modal extends Vue {}
@@ -18,9 +18,17 @@ export default class Modal extends Vue {}
   left: 0;
   width: 100%;
   height: 100vh;
-  background-color: black;
-  opacity: 0.5;
+  background-color: rgba($color: #000000, $alpha: 0.5);
   z-index: 1000;
   overflow-y: hidden;
+
+  & > * {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 1rem;
+    background-color: white;
+  }
 }
 </style>
