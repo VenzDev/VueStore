@@ -17,7 +17,6 @@
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
 import shopCart from "@/store/modules/shopCart";
-import CartItemModel from "@/store/models/CartItemModel";
 
 @Component
 export default class Header extends Vue {
@@ -29,7 +28,14 @@ export default class Header extends Vue {
   }
 
   get path() {
-    return this.$route.name;
+    const { params, name } = this.$route;
+    if (name === "Category") {
+      if (params.subcategory) {
+        return params.subcategory + " " + params.category;
+      }
+      return params.category;
+    }
+    return name;
   }
   get cartCount() {
     return shopCart.cartCount;
@@ -82,6 +88,7 @@ export default class Header extends Vue {
     margin-left: 1rem;
     font-size: 24px;
     line-height: 1.5;
+    text-transform: capitalize;
   }
 }
 </style>

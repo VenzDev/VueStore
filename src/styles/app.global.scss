@@ -6,7 +6,8 @@
   list-style: none;
 
   &:visited,
-  &:active {
+  &:active,
+  &:link {
     color: inherit;
   }
 }

@@ -6,31 +6,32 @@
     <div v-else>
       <p class="itemsAmount">{{ "Items: " + itemsAmount }}</p>
       <section class="itemsContainer">
-        <router-link
-          tag="div"
-          :to="'/item/' + item.id"
-          v-for="item in items"
-          :key="item.id"
-        >
-          <div class="imageContainer">
-            <img :src="item.image" alt="itemImage" />
-          </div>
-          <p class="itemName">{{ item.product_name }}</p>
-          <p class="itemPrice">{{ item.price }}</p>
-        </router-link>
+        <div v-for="item in items" :key="item.id">
+          <button class="addToCartButton">
+            Add to Cart<i class="fa fa-shopping-cart"></i>
+          </button>
+          <router-link tag="div" :to="'/item/' + item.id">
+            <div class="imageContainer">
+              <img :src="item.image" alt="itemImage" />
+            </div>
+            <p class="itemName">{{ item.product_name }}</p>
+            <p class="itemPrice">{{ item.price }}</p>
+          </router-link>
+        </div>
       </section>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { Vue, Component } from "vue-property-decorator";
-import { getItems } from "@/store/api";
+import { Vue, Component, Watch } from "vue-property-decorator";
+import { getCategoryItems } from "@/store/api";
 import LoadingSpinner from "@/components/LoadingSpinner.vue";
 import ItemModel from "@/store/models/ItemModel";
+import validateCategoryUrl from "@/utils/validateCategoryUrl";
 
 @Component({ components: { LoadingSpinner } })
-export default class Jeans extends Vue {
+export default class Category extends Vue {
   isLoading = false;
   items: Array<ItemModel> | null = null;
 
@@ -38,11 +39,26 @@ export default class Jeans extends Vue {
     if (!this.items) return "Not Found";
     return this.items.length;
   }
+  validateUrl() {
+    const isValidUrl = validateCategoryUrl(this.$route.path);
+    if (!isValidUrl) this.$router.push("/");
+  }
+
+  async getItems() {
+    this.validateUrl();
+    this.isLoading = true;
+    if (this.$route.params.subcategory)
+      this.items = await getCategoryItems(true);
+    else this.items = await getCategoryItems(false);
+    this.isLoading = false;
+  }
 
   async created() {
-    this.isLoading = true;
-    this.items = await getItems();
-    this.isLoading = false;
+    await this.getItems();
+  }
+  @Watch("$route")
+  async watchUrlChange() {
+    await this.getItems();
   }
 }
 </script>
@@ -67,6 +83,36 @@ export default class Jeans extends Vue {
   display: flex;
   flex-wrap: wrap;
   margin: 1rem;
+
+  & > div:hover .addToCartButton {
+    display: block;
+  }
+
+  & .addToCartButton {
+    display: none;
+    position: absolute;
+    z-index: 10;
+    padding: 0.5rem 1rem;
+    font-size: 0.8rem;
+    font-family: $font-secondary;
+    background-color: black;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: 0.2s;
+
+    & i {
+      margin-left: 5px;
+    }
+
+    &:hover {
+      background-color: gray;
+      color: black;
+    }
+    &:active {
+      transform: scale(1.08);
+    }
+  }
 
   & > div {
     flex-basis: 25%;

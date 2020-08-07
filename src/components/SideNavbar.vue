@@ -3,44 +3,71 @@
     <div @click="handleChange" class="close-navbar">x</div>
     <h3 class="side-navbar-logo">
       <router-link to="/">
-        <b>LOGO</b>
+        <b @click="handleChange">LOGO</b>
       </router-link>
     </h3>
     <div class="navbar-list">
       <ul>
         <li>
-          <p>Shirts <i class="navIcon fa fa-caret-down"></i></p>
+          <router-link active-class="isActive" to="/category/shirts">
+            <p @click="handleChange">Shirts</p>
+          </router-link>
         </li>
         <li>
-          <p>Dresses <i class="navIcon fa fa-caret-down"></i></p>
+          <router-link active-class="isActive" to="/category/dresses">
+            <p @click="handleChange">Dresses</p>
+          </router-link>
         </li>
         <li>
           <p @click="isJeansOpen = !isJeansOpen">
             Jeans <i class="navIcon fa fa-caret-down"></i>
           </p>
           <div class="subMenu" v-if="isJeansOpen">
-            <router-link active-class="isActive" to="/jeans/skinny">
+            <router-link active-class="isActive" to="/category/jeans/skinny">
               <p @click="handleChange">
                 <i class="subMenuIcon fa fa-caret-right"></i>
                 Skinny
               </p>
             </router-link>
-            <p>Relaxed</p>
-            <p>Bootcut</p>
-            <p>Straight</p>
+            <router-link active-class="isActive" to="/category/jeans/relaxed">
+              <p @click="handleChange">
+                <i class="subMenuIcon fa fa-caret-right"></i>
+                Relaxed
+              </p>
+            </router-link>
+            <router-link active-class="isActive" to="/category/jeans/bootcut">
+              <p @click="handleChange">
+                <i class="subMenuIcon fa fa-caret-right"></i>
+                Bootcut
+              </p>
+            </router-link>
+            <router-link active-class="isActive" to="/category/jeans/straight">
+              <p @click="handleChange">
+                <i class="subMenuIcon fa fa-caret-right"></i>
+                Straight
+              </p>
+            </router-link>
           </div>
         </li>
         <li>
-          <p>Jackets <i class="navIcon fa fa-caret-down"></i></p>
+          <router-link active-class="isActive" to="/category/jackets">
+            <p @click="handleChange">Jackets</p>
+          </router-link>
         </li>
         <li>
-          <p>Gymwear <i class="navIcon fa fa-caret-down"></i></p>
+          <router-link active-class="isActive" to="/category/gymwear">
+            <p @click="handleChange">Gymwear</p>
+          </router-link>
         </li>
         <li>
-          <p>Blazers <i class="navIcon fa fa-caret-down"></i></p>
+          <router-link active-class="isActive" to="/category/blazers">
+            <p @click="handleChange">Blazers</p>
+          </router-link>
         </li>
         <li>
-          <p>Shoes <i class="navIcon fa fa-caret-down"></i></p>
+          <router-link active-class="isActive" to="/category/shoes">
+            <p @click="handleChange">Shoes</p>
+          </router-link>
         </li>
       </ul>
     </div>
