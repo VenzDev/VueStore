@@ -18,14 +18,14 @@ export default class Home extends Vue {
 </script>
 
 <style lang="scss" scoped>
-@import "@/styles/_utils.scss";
+@import "@/styles/config.scss";
 
 .newCollectionContainer {
   position: absolute;
   top: 130px;
   left: 50px;
   color: white;
-  font-family: "Montserrat", sans-serif;
+  font-family: $font-primary;
 
   & h1 {
     font-size: 4rem;

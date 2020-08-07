@@ -13,13 +13,14 @@ export default class PageNotFound extends Vue {}
 </script>
 
 <style lang="scss" scoped>
+@import "@/styles/config.scss";
 .notFoundContainer {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   height: 400px;
-  font-family: "Roboto", sans-serif;
+  font-family: $font-secondary;
 
   & h1 {
     font-size: 4rem;

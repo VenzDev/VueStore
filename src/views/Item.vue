@@ -2,7 +2,7 @@
   <div class="wrapper">
     <transition name="fade">
       <Modal :handleModal="handleModal" v-if="isModalOpen">
-        <div class="modalContainer u-Montserrat">
+        <div class="modalContainer">
           <h2>{{ item.product_name }}</h2>
           <p>{{ item.price + " per Item" }}</p>
           <div class="item_quantity">
@@ -32,12 +32,12 @@
       <div class="itemImage">
         <img :src="item.image" alt="itemImage" />
       </div>
-      <div class="itemInfo u-Montserrat">
+      <div class="itemInfo">
         <h2>{{ item.product_name }}</h2>
         <h3>{{ item.price }}</h3>
         <p>{{ item.short_description }}</p>
         <p class="sizeHelp"><i class="fa fa-shirtsinbulk"></i> Size help</p>
-        <button @click="isModalOpen = !isModalOpen" class="u-Roboto">
+        <button @click="isModalOpen = !isModalOpen">
           Add to Cart
         </button>
       </div>
@@ -83,7 +83,7 @@ export default class Item extends Vue {
 </script>
 
 <style lang="scss" scoped>
-@import "@/styles/_utils.scss";
+@import "@/styles/config.scss";
 .wrapper {
   margin: 1rem;
 }
@@ -97,6 +97,7 @@ export default class Item extends Vue {
 }
 .modalContainer {
   min-width: 350px;
+  font-family: $font-primary;
   & h2,
   & p {
     margin-bottom: 1rem;
@@ -111,7 +112,7 @@ export default class Item extends Vue {
       height: 30px;
       width: 30px;
       font-size: 1.5rem;
-      font-family: "Roboto", sans-serif;
+      font-family: $font-secondary;
     }
 
     & p {
@@ -179,6 +180,7 @@ export default class Item extends Vue {
   & .itemInfo {
     margin: 2rem;
     flex-basis: 50%;
+    font-family: $font-primary;
 
     @media screen and (max-width: 780px) {
       flex-basis: 100%;
@@ -194,6 +196,7 @@ export default class Item extends Vue {
     & button {
       padding: 0.5rem 1rem;
       font-size: 1.2rem;
+      font-family: $font-secondary;
       background-color: black;
       color: white;
       border: none;

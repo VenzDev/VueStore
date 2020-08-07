@@ -1,5 +1,5 @@
 <template>
-  <footer class="u-Montserrat">
+  <footer>
     <div class="contactContainer">
       <h4>Contact</h4>
       <p>Questions? Go ahead.</p>
@@ -49,12 +49,13 @@ export default class Footer extends Vue {}
 </script>
 
 <style lang="scss" scoped>
-@import "@/styles/_utils.scss";
+@import "@/styles/config.scss";
 footer {
   display: flex;
   flex-wrap: wrap;
   background-color: #f1f1f1;
   padding-top: 2rem;
+  font-family: $font-primary;
 
   @media screen and (max-width: 540px) {
     justify-items: center;

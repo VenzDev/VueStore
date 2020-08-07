@@ -1,10 +1,10 @@
 <template>
   <header class="header">
-    <p class="category-title u-Montserrat">{{ path }}</p>
+    <p class="category-title">{{ path }}</p>
     <p>
       <router-link to="/shop-cart">
         <i class="fa fa-shopping-cart">
-          <div v-if="!emptyCart" class="cartQuantity u-Montserrat">
+          <div v-if="!emptyCart" class="cartQuantity">
             {{ cartCount }}
           </div>
         </i>
@@ -41,7 +41,7 @@ export default class Header extends Vue {
 </script>
 
 <style lang="scss" scoped>
-@import "@/styles/_utils.scss";
+@import "@/styles/config.scss";
 
 .header {
   display: flex;
@@ -49,12 +49,14 @@ export default class Header extends Vue {
   height: 84px;
   align-items: center;
   justify-content: space-between;
+  font-family: $font-primary;
 
   & .cartQuantity {
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 0.8rem;
+    font-family: $font-primary;
     position: absolute;
     top: 50%;
     right: -50%;

@@ -15,7 +15,7 @@
       </div>
     </header>
     <Wrapper class="content">
-      <div @click="handleChange" :class="{ xd: isNavbar }"></div>
+      <div @click="handleChange" :class="{ overlay: isNavbar }"></div>
       <router-view />
     </Wrapper>
   </div>
@@ -37,18 +37,8 @@ export default class App extends Vue {
 </script>
 
 <style lang="scss">
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  text-decoration: none;
-  list-style: none;
+@import "@/styles/app.global.scss";
 
-  &:visited,
-  &:active {
-    color: inherit;
-  }
-}
 .headerNav-logo {
   font-family: "Montserrat", sans-serif;
   font-weight: 400;
@@ -88,7 +78,7 @@ export default class App extends Vue {
     display: none;
   }
 }
-.xd {
+.overlay {
   position: absolute;
   background-color: black;
   z-index: 50;

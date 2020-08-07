@@ -61,11 +61,11 @@ export default class SideNavbar extends Vue {
 </script>
 
 <style lang="scss" scoped>
-@import "@/styles/_utils.scss";
+@import "@/styles/config.scss";
 .side-navbar {
   flex-shrink: 0;
   width: 250px;
-  font-family: "Roboto", sans-serif;
+  font-family: $font-secondary;
   position: fixed;
   min-height: 100vh;
   max-height: 100vh;
@@ -145,7 +145,7 @@ export default class SideNavbar extends Vue {
   }
 
   & .side-navbar-logo {
-    font-family: "Montserrat", sans-serif;
+    font-family: $font-primary;
     font-weight: 400;
     font-size: 24px;
     padding: 10px 0;

@@ -83,6 +83,8 @@ export default class ShopCart extends Vue {
 </script>
 
 <style lang="scss" scoped>
+@import "@/styles/config.scss";
+
 .cartContainer {
   display: flex;
 
@@ -123,7 +125,7 @@ export default class ShopCart extends Vue {
           height: 30px;
           width: 30px;
           font-size: 1.5rem;
-          font-family: "Roboto", sans-serif;
+          font-family: $font-secondary;
         }
 
         & p {
@@ -146,7 +148,7 @@ export default class ShopCart extends Vue {
 
       & h2 {
         font-size: 1.2rem;
-        font-family: "Roboto", sans-serif;
+        font-family: $font-secondary;
         padding: 1rem;
       }
     }
@@ -162,7 +164,7 @@ export default class ShopCart extends Vue {
   }
   & .checkout {
     top: 20px;
-    font-family: "Roboto", sans-serif;
+    font-family: $font-secondary;
     border-radius: 6px;
     display: flex;
     flex-direction: column;
@@ -195,7 +197,7 @@ export default class ShopCart extends Vue {
   }
 }
 .emptyCart {
-  font-family: "Roboto", sans-serif;
+  font-family: $font-secondary;
   display: flex;
   align-items: center;
   justify-content: center;

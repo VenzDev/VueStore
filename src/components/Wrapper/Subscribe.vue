@@ -1,5 +1,5 @@
 <template>
-  <section class="subscribeContainer u-Montserrat">
+  <section class="subscribeContainer">
     <h1>Subscribe</h1>
     <p>To get special offers and VIP treatment:</p>
     <input type="text" placeholder="Enter e-mail" />
@@ -15,11 +15,12 @@ export default class Subscribe extends Vue {}
 </script>
 
 <style lang="scss" scoped>
-@import "@/styles/_utils.scss";
+@import "@/styles/config.scss";
 
 .subscribeContainer {
   padding: 2rem 1rem;
   background-color: black;
+  font-family: $font-primary;
   color: white;
 
   & input {

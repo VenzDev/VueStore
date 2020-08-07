@@ -48,11 +48,12 @@ export default class Jeans extends Vue {
 </script>
 
 <style lang="scss" scoped>
+@import "@/styles/config.scss";
 .itemsAmount {
   display: block;
   color: grey;
 
-  font-family: "Roboto", sans-serif;
+  font-family: $font-secondary;
   margin: 1rem;
 }
 
@@ -105,7 +106,7 @@ export default class Jeans extends Vue {
 
     & .itemName,
     .itemPrice {
-      font-family: "Roboto", sans-serif;
+      font-family: $font-secondary;
     }
     & .itemName {
       margin-top: 1rem;
