@@ -17,7 +17,7 @@ import CartItemModel from "../models/CartItemModel";
 class ShopCartModule extends VuexModule {
   cart: Array<CartItemModel> = [];
 
-  get cartCount() {
+  get cartCount(): number {
     let count = 0;
     this.cart.forEach(item => {
       count += item.quantity;
@@ -25,11 +25,11 @@ class ShopCartModule extends VuexModule {
     return count;
   }
 
-  get cartItems() {
+  get cartItems(): Array<CartItemModel> {
     return this.cart;
   }
 
-  get emptyCart() {
+  get emptyCart(): boolean {
     return this.cart.length === 0 ? true : false;
   }
 
@@ -44,6 +44,7 @@ class ShopCartModule extends VuexModule {
 
   @Mutation
   updateCart(cart: Array<CartItemModel>) {
+    localStorage.setItem("cartItems", JSON.stringify(cart));
     this.cart = cart;
   }
 
@@ -56,11 +57,10 @@ class ShopCartModule extends VuexModule {
 
     if (index === -1) {
       cart.push(item);
-      return cart;
     } else {
       cart[index].quantity += item.quantity;
-      return cart;
     }
+    return cart;
   }
 
   @Action({ commit: "updateCart" })
@@ -100,6 +100,10 @@ class ShopCartModule extends VuexModule {
       cart.splice(index, 1);
       return cart;
     }
+  }
+  @Action({ commit: "updateCart" })
+  getItemsFromLocalStorage(cartItems: Array<CartItemModel>) {
+    return cartItems;
   }
 }
 

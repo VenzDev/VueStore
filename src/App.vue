@@ -6,7 +6,9 @@
     />
     <header class="headerNav">
       <div class="headerNav-logo">
-        <b>LOGO</b>
+        <router-link to="/">
+          <b>LOGO</b>
+        </router-link>
       </div>
       <div @click="handleChange" class="headerNav-hamburger">
         <i class="fa fa-bars"></i>

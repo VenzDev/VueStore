@@ -1,5 +1,6 @@
 <template>
   <nav class="side-navbar">
+    <div @click="handleChange" class="close-navbar">x</div>
     <h3 class="side-navbar-logo">
       <router-link to="/">
         <b>LOGO</b>
@@ -83,6 +84,26 @@ export default class SideNavbar extends Vue {
 
   @media screen and (max-width: 1000px) {
     width: 0;
+  }
+
+  & .close-navbar {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 0;
+    color: white;
+    background-color: black;
+    padding: 10px;
+    height: 30px;
+    width: 30px;
+    line-height: 0;
+
+    @media screen and (max-width: 1000px) {
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
   }
 
   & .navbar-list {

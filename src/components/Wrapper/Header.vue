@@ -17,9 +17,17 @@
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
 import shopCart from "@/store/modules/shopCart";
+import CartItemModel from "@/store/models/CartItemModel";
 
 @Component
 export default class Header extends Vue {
+  created() {
+    const local = localStorage.getItem("cartItems");
+    if (local === null) return;
+    const cartItems = JSON.parse(local);
+    shopCart.getItemsFromLocalStorage(cartItems);
+  }
+
   get path() {
     return this.$route.name;
   }

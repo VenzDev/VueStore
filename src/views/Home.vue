@@ -19,6 +19,7 @@ export default class Home extends Vue {
 
 <style lang="scss" scoped>
 @import "@/styles/_utils.scss";
+
 .newCollectionContainer {
   position: absolute;
   top: 130px;

@@ -21,3 +21,5 @@ import Footer from "./Footer.vue";
 })
 export default class Wrapper extends Vue {}
 </script>
+
+<style lang="scss" scoped></style>
