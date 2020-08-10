@@ -24,10 +24,7 @@ export default class Header extends Vue {
   lastScrollPosition = 0;
 
   created() {
-    const local = localStorage.getItem("cartItems");
-    if (local === null) return;
-    const cartItems = JSON.parse(local);
-    shopCart.getItemsFromLocalStorage(cartItems);
+    shopCart.getItemsFromLocalStorage();
   }
   onScroll() {
     if (window.innerWidth > 1000) {

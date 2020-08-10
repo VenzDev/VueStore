@@ -102,8 +102,10 @@ class ShopCartModule extends VuexModule {
     }
   }
   @Action({ commit: "updateCart" })
-  getItemsFromLocalStorage(cartItems: Array<CartItemModel>) {
-    return cartItems;
+  getItemsFromLocalStorage() {
+    const local = localStorage.getItem("cartItems");
+    if (local === null) return this.cart;
+    return JSON.parse(local);
   }
 }
 
