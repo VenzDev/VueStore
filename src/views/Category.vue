@@ -1,13 +1,22 @@
 <template>
   <div>
+    <AddToCartModal
+      :item="selectedItem"
+      :handleModal="handleModal"
+      :isModalOpen="isModalOpen"
+    />
     <div class="spinnerContainer" v-if="isLoading">
       <LoadingSpinner />
     </div>
     <div v-else>
       <p class="itemsAmount">{{ "Items: " + itemsAmount }}</p>
+      <div class="priceRangeContainer">
+        <p>Price range</p>
+        <VueSlider :max="max" :min="min" v-model="value"></VueSlider>
+      </div>
       <section class="itemsContainer">
-        <div v-for="item in items" :key="item.id">
-          <button class="addToCartButton">
+        <div v-for="item in filteredItems" :key="item.id">
+          <button @click="handleSelectItem(item)" class="addToCartButton">
             Add to Cart<i class="fa fa-shopping-cart"></i>
           </button>
           <router-link tag="div" :to="'/item/' + item.id">
@@ -29,19 +38,31 @@ import { getCategoryItems } from "@/store/api";
 import LoadingSpinner from "@/components/LoadingSpinner.vue";
 import ItemModel from "@/store/models/ItemModel";
 import validateCategoryUrl from "@/utils/validateCategoryUrl";
+import "vue-slider-component/theme/antd.css";
+import VueSlider from "vue-slider-component";
+import AddToCartModal from "@/components/AddToCartModal.vue";
 
-@Component({ components: { LoadingSpinner } })
+@Component({ components: { LoadingSpinner, VueSlider, AddToCartModal } })
 export default class Category extends Vue {
   isLoading = false;
   items: Array<ItemModel> | null = null;
-
-  get itemsAmount() {
-    if (!this.items) return "Not Found";
-    return this.items.length;
-  }
+  selectedItem: ItemModel | null = null;
+  value = [0, 100];
+  itemsAmount = 0;
+  max = 250;
+  min = 0;
+  isModalOpen = false;
   validateUrl() {
     const isValidUrl = validateCategoryUrl(this.$route.path);
     if (!isValidUrl) this.$router.push("/");
+  }
+
+  handleSelectItem(item: ItemModel) {
+    this.selectedItem = item;
+    this.handleModal();
+  }
+  handleModal() {
+    this.isModalOpen = !this.isModalOpen;
   }
 
   async getItems() {
@@ -51,6 +72,21 @@ export default class Category extends Vue {
       this.items = await getCategoryItems(true);
     else this.items = await getCategoryItems(false);
     this.isLoading = false;
+    this.setPriceRange();
+  }
+
+  setPriceRange() {
+    let min = 1000;
+    let max = -1;
+    this.items?.forEach(item => {
+      const price = parseFloat(item.price.substr(1));
+      if (price >= max) max = price;
+      if (price <= min) min = price;
+    });
+    this.value[0] = Math.floor(min);
+    this.min = Math.floor(min);
+    this.max = Math.round(max);
+    this.value[1] = Math.round(max);
   }
 
   async created() {
@@ -59,6 +95,16 @@ export default class Category extends Vue {
   @Watch("$route")
   async watchUrlChange() {
     await this.getItems();
+  }
+  get filteredItems() {
+    const filteredItems = this.items?.filter(item => {
+      const price = parseFloat(item.price.substr(1));
+      if (price >= this.value[0] && price <= this.value[1]) return true;
+      return false;
+    });
+    if (filteredItems) this.itemsAmount = filteredItems.length;
+    else return 0;
+    return filteredItems;
   }
 }
 </script>
@@ -71,6 +117,15 @@ export default class Category extends Vue {
 
   font-family: $font-secondary;
   margin: 1rem;
+}
+
+.priceRangeContainer {
+  font-family: $font-secondary;
+  padding: 2rem;
+
+  & p {
+    margin-bottom: 1rem;
+  }
 }
 
 .spinnerContainer {

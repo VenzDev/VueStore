@@ -1,7 +1,7 @@
 <template>
-  <header class="header">
+  <header :class="{ shrinkHeader: shrinkHeader }" class="header">
     <p class="category-title">{{ path }}</p>
-    <p>
+    <p class="icons">
       <router-link to="/shop-cart">
         <i class="fa fa-shopping-cart">
           <div v-if="!emptyCart" class="cartQuantity">
@@ -20,11 +20,34 @@ import shopCart from "@/store/modules/shopCart";
 
 @Component
 export default class Header extends Vue {
+  shrinkHeader = false;
+  lastScrollPosition = 0;
+
   created() {
     const local = localStorage.getItem("cartItems");
     if (local === null) return;
     const cartItems = JSON.parse(local);
     shopCart.getItemsFromLocalStorage(cartItems);
+  }
+  onScroll() {
+    if (window.innerWidth > 1000) {
+      const currentScrollPosition =
+        window.pageYOffset || document.documentElement.scrollTop;
+      if (currentScrollPosition < 0) {
+        return;
+      }
+      if (currentScrollPosition > 60) {
+        this.shrinkHeader = true;
+      } else this.shrinkHeader = false;
+      this.lastScrollPosition = currentScrollPosition;
+    } else this.shrinkHeader = false;
+  }
+
+  mounted() {
+    window.addEventListener("scroll", this.onScroll);
+  }
+  beforeDestroy() {
+    window.removeEventListener("scroll", this.onScroll);
   }
 
   get path() {
@@ -50,12 +73,36 @@ export default class Header extends Vue {
 @import "@/styles/config.scss";
 
 .header {
+  position: fixed;
   display: flex;
-  width: 100%;
+  top: 0;
+  max-width: 950px;
+  background-color: white;
+  z-index: 50;
+  margin: 0 auto;
+  left: 250px;
+  right: 0;
   height: 84px;
   align-items: center;
   justify-content: space-between;
   font-family: $font-primary;
+  transition: 0.2s;
+
+  &.shrinkHeader {
+    height: 48px;
+    & .category-title {
+      font-size: 1.2rem;
+    }
+  }
+  .icons {
+    @media screen and (max-width: 1000px) {
+      display: none;
+    }
+  }
+
+  @media screen and (max-width: 1000px) {
+    position: static;
+  }
 
   & .cartQuantity {
     display: flex;
@@ -89,6 +136,7 @@ export default class Header extends Vue {
     font-size: 24px;
     line-height: 1.5;
     text-transform: capitalize;
+    transition: 0.2s;
   }
 }
 </style>
