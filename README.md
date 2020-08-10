@@ -1,5 +1,8 @@
 # vue-store
 
+## demo 
+https://competent-bohr-340171.netlify.app
+
 ## Project setup
 ```
 npm install
