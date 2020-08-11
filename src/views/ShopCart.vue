@@ -23,6 +23,15 @@
           <h2>Products Price</h2>
           <h2>{{ "$" + itemsPrice }}</h2>
         </div>
+        <div class="checkout_info">
+          <h2>Delivery</h2>
+          <h2>From $0.00 <i class="infoIcon fa fa-info"></i></h2>
+        </div>
+        <div class="line"></div>
+        <div class="checkout_info">
+          <h2>Total</h2>
+          <h2>{{ "$" + itemsPrice }}</h2>
+        </div>
         <router-link tag="button" to="/checkout">Go to Checkout</router-link>
       </div>
     </div>
@@ -165,10 +174,16 @@ export default class ShopCart extends Vue {
     }
 
     & .checkout_info {
-      margin-top: 2rem;
       padding: 0.5rem;
       display: flex;
       justify-content: space-between;
+
+      & .infoIcon {
+        width: 26px;
+        border: 1px solid black;
+        border-radius: 50%;
+        text-align: center;
+      }
     }
 
     & button {
