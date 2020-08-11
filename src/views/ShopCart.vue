@@ -23,16 +23,7 @@
           <h2>Products Price</h2>
           <h2>{{ "$" + itemsPrice }}</h2>
         </div>
-        <div class="checkout_info">
-          <h2>Delivery</h2>
-          <h2>{{ "$" + deliveryPrice }}</h2>
-        </div>
-        <div class="line"></div>
-        <div class="checkout_info">
-          <h2>Total</h2>
-          <h2>{{ "$" + totalPrice }}</h2>
-        </div>
-        <button>Go to Checkout</button>
+        <router-link tag="button" to="/checkout">Go to Checkout</router-link>
       </div>
     </div>
   </div>
@@ -48,7 +39,6 @@ import shopCart from "@/store/modules/shopCart";
 
 @Component
 export default class ShopCart extends Vue {
-  deliveryPrice = 8.99;
   get isCartEmpty() {
     return shopCart.emptyCart;
   }
@@ -64,10 +54,6 @@ export default class ShopCart extends Vue {
   get itemsPrice() {
     return shopCart.itemsPrice;
   }
-  get totalPrice() {
-    return (this.deliveryPrice + this.itemsPrice).toFixed(2);
-  }
-
   incrementItemQuantity(id: number) {
     shopCart.incrementItemQuantity(id);
   }
@@ -179,6 +165,7 @@ export default class ShopCart extends Vue {
     }
 
     & .checkout_info {
+      margin-top: 2rem;
       padding: 0.5rem;
       display: flex;
       justify-content: space-between;
