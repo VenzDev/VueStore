@@ -1,8 +1,6 @@
 <template>
   <div class="checkoutContainer">
-    <div class="methodsContainer">
-      <p>1</p>
-    </div>
+    <DeliveryMethod />
     <div class="submitContainer">
       <div class="submit">
         <p>submit</p>
@@ -14,8 +12,9 @@
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
 import shopCart from "@/store/modules/shopCart";
+import DeliveryMethod from "@/components/DeliveryMethod.vue";
 
-@Component
+@Component({ components: { DeliveryMethod } })
 export default class CartCheckout extends Vue {
   created() {
     if (shopCart.emptyCart) this.$router.push("/");
@@ -27,10 +26,6 @@ export default class CartCheckout extends Vue {
 @import "@/styles/config.scss";
 .checkoutContainer {
   display: flex;
-
-  & .methodsContainer {
-    flex-basis: 70%;
-  }
   & .submitContainer {
     flex-basis: 30%;
     background-color: lightgray;
