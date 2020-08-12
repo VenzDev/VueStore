@@ -182,7 +182,9 @@ export default class DeliveryMethod extends Vue {
       shopCart.setPaymentMethod(null);
       shopCart.setUserData(null);
       shopCart.setDeliveryMethod(null);
-    }
+
+      document.documentElement.style.overflow = "hidden";
+    } else document.documentElement.style.overflow = "auto";
   }
 }
 </script>

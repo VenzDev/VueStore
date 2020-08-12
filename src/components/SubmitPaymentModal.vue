@@ -137,10 +137,14 @@ export default class SubmitPaymentModal extends Vue {
   }
 
   mounted() {
+    document.documentElement.style.overflow = "hidden";
     //check if deliveryMethod is a collect on delivery
     if (this.deliveryMethod.id === 2) {
       this.isSubmitted = true;
     }
+  }
+  beforeDestroy() {
+    document.documentElement.style.overflow = "auto";
   }
 }
 </script>
