@@ -42,7 +42,7 @@ const routes: Array<RouteConfig> = [
   {
     //Netlify wrong url handler
     path: "/error",
-    name: "Page Not Found",
+    name: "Page Not Found*",
     component: () =>
       import(/* webpackChunkName: "error" */ "../views/PageNotFound.vue")
   }

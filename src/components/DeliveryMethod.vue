@@ -1,15 +1,29 @@
 <template>
   <div class="methodsContainer">
+    <InStorePickupModal
+      :handleSelect="handleSelect"
+      :handleModal="handleInStoreModal"
+      :isModalOpen="isInStoreModalOpen"
+      :selectedMethod="selectedMethod"
+    />
+    <CourierModal
+      :handleSelect="handleSelect"
+      :handleModal="handleCourierModal"
+      :isModalOpen="isCourierModalOpen"
+      :selectedMethod="selectedMethod"
+    />
     <section class="deliveryMethods">
       <h2><span class="circle">1</span> Choose Delivery Method</h2>
       <ul>
         <li
           v-for="method in methods"
           :key="method.id"
-          @click="handleSelect(method.name)"
+          @click="handleSelect(method)"
         >
           <i
-            :class="{ active: selectedMethod === method.name }"
+            :class="{
+              active: selectedMethod && selectedMethod.id === method.id
+            }"
             class="iconCircle fa fa-circle"
           ></i>
           {{ method.name }}
@@ -23,12 +37,22 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from "vue-property-decorator";
+import { Vue, Component } from "vue-property-decorator";
 import DeliveryModel from "@/store/models/DeliveryModel";
+import InStorePickupModal from "@/components/InStorePickupModal.vue";
+import CourierModal from "@/components/CourierModal.vue";
 
-@Component
+@Component({ components: { InStorePickupModal, CourierModal } })
 export default class DeliveryMethod extends Vue {
-  @Prop() handleSelectDeliveryMethod!: Function;
+  isInStoreModalOpen = false;
+  isCourierModalOpen = false;
+
+  handleInStoreModal() {
+    this.isInStoreModalOpen = !this.isInStoreModalOpen;
+  }
+  handleCourierModal() {
+    this.isCourierModalOpen = !this.isCourierModalOpen;
+  }
 
   methods: Array<DeliveryModel> = [
     { id: 0, name: "In-store pickup", timeInfo: "1-2 days", price: "$0" },
@@ -43,8 +67,14 @@ export default class DeliveryMethod extends Vue {
 
   selectedMethod: DeliveryModel | null = null;
 
-  handleSelect(name: DeliveryModel) {
-    this.selectedMethod = name;
+  handleSelect(method: DeliveryModel | null) {
+    if (method === null) {
+      this.selectedMethod = null;
+    } else {
+      this.selectedMethod = method;
+      if (method.id === 0) this.isInStoreModalOpen = true;
+      else this.isCourierModalOpen = true;
+    }
   }
 }
 </script>
@@ -74,6 +104,8 @@ export default class DeliveryMethod extends Vue {
     }
   }
   ul {
+    margin-bottom: 3rem;
+    margin-right: 2rem;
     & li {
       display: flex;
       align-items: center;

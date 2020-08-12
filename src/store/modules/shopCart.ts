@@ -7,6 +7,11 @@ import {
 } from "vuex-module-decorators";
 import store from "@/store";
 import CartItemModel from "../models/CartItemModel";
+import UserCheckoutModel from "../models/UserCheckoutModel";
+import DeliveryModel from "../models/DeliveryModel";
+import UserInStoreModel from "../models/UserInStoreModel";
+import UserCourierModel from "../models/UserCourierModel";
+import PaymentMethod from "../models/PaymentMethod";
 
 @Module({
   name: "shopCart",
@@ -16,6 +21,11 @@ import CartItemModel from "../models/CartItemModel";
 })
 class ShopCartModule extends VuexModule {
   cart: Array<CartItemModel> = [];
+  submitCheckoutData: UserCheckoutModel = {
+    deliveryMethod: null,
+    userAddressData: null,
+    paymentMethod: null
+  };
 
   get cartCount(): number {
     let count = 0;
@@ -23,6 +33,18 @@ class ShopCartModule extends VuexModule {
       count += item.quantity;
     });
     return count;
+  }
+
+  get userData() {
+    return this.submitCheckoutData.userAddressData;
+  }
+
+  get deliveryMethod() {
+    return this.submitCheckoutData.deliveryMethod;
+  }
+
+  get paymentMethod() {
+    return this.submitCheckoutData.paymentMethod;
   }
 
   get cartItems(): Array<CartItemModel> {
@@ -43,9 +65,41 @@ class ShopCartModule extends VuexModule {
   }
 
   @Mutation
+  updatePaymentMethod(paymentMethod: PaymentMethod) {
+    this.submitCheckoutData.paymentMethod = paymentMethod;
+  }
+
+  @Mutation
+  updateUserData(userData) {
+    this.submitCheckoutData.userAddressData = userData;
+  }
+
+  @Mutation
+  updateDeliveryMethod(deliveryMethod: DeliveryModel) {
+    this.submitCheckoutData.deliveryMethod = deliveryMethod;
+  }
+
+  @Mutation
   updateCart(cart: Array<CartItemModel>) {
-    localStorage.setItem("cartItems", JSON.stringify(cart));
+    if (cart.length === 0) {
+      localStorage.removeItem("cartItems");
+    } else localStorage.setItem("cartItems", JSON.stringify(cart));
     this.cart = cart;
+  }
+
+  @Action({ commit: "updatePaymentMethod" })
+  setPaymentMethod(paymentMethod: PaymentMethod | null) {
+    return paymentMethod;
+  }
+
+  @Action({ commit: "updateUserData" })
+  setUserData(userData: UserInStoreModel | UserCourierModel | null) {
+    return userData;
+  }
+
+  @Action({ commit: "updateDeliveryMethod" })
+  setDeliveryMethod(deliveryMethod: DeliveryModel | null) {
+    return deliveryMethod;
   }
 
   @Action({ commit: "updateCart" })
@@ -106,6 +160,10 @@ class ShopCartModule extends VuexModule {
     const local = localStorage.getItem("cartItems");
     if (local === null) return this.cart;
     return JSON.parse(local);
+  }
+  @Action({ commit: "updateCart" })
+  clearShopCart() {
+    return [];
   }
 }
 

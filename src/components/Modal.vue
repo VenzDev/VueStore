@@ -17,11 +17,9 @@ export default class Modal extends Vue {}
   top: 0;
   left: 0;
   width: 100%;
-  height: 100vh;
+  height: 100%;
   background-color: rgba($color: #000000, $alpha: 0.5);
   z-index: 1000;
-  overflow-y: hidden;
-
   & > * {
     position: absolute;
     top: 50%;
