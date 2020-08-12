@@ -27,7 +27,11 @@
             class="iconCircle fa fa-circle"
           ></i>
           {{ method.name }}
-          <div class="fillSpace"></div>
+          <div class="fillSpace">
+            <p v-if="address && selectedMethod.id === method.id">
+              Todo show address
+            </p>
+          </div>
           <p>{{ method.timeInfo }}</p>
           <p>{{ method.price }}</p>
         </li>
@@ -41,11 +45,17 @@ import { Vue, Component } from "vue-property-decorator";
 import DeliveryModel from "@/store/models/DeliveryModel";
 import InStorePickupModal from "@/components/InStorePickupModal.vue";
 import CourierModal from "@/components/CourierModal.vue";
+import shopCart from "@/store/modules/shopCart";
 
 @Component({ components: { InStorePickupModal, CourierModal } })
 export default class DeliveryMethod extends Vue {
   isInStoreModalOpen = false;
   isCourierModalOpen = false;
+  selectedMethod: DeliveryModel | null = null;
+
+  get address() {
+    return shopCart.userData;
+  }
 
   handleInStoreModal() {
     this.isInStoreModalOpen = !this.isInStoreModalOpen;
@@ -64,8 +74,6 @@ export default class DeliveryMethod extends Vue {
       price: "$12.99"
     }
   ];
-
-  selectedMethod: DeliveryModel | null = null;
 
   handleSelect(method: DeliveryModel | null) {
     if (method === null) {
