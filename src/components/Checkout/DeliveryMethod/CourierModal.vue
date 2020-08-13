@@ -6,29 +6,33 @@
         <div class="inputs">
           <div>
             <p>Name</p>
-            <input v-model="name" type="text" placeholder="Name" />
+            <input v-model="user.name" type="text" placeholder="Name" />
             <p v-if="error.name" class="error">{{ error.name }}</p>
           </div>
           <div>
             <p>Surname</p>
-            <input v-model="surname" type="text" placeholder="Surname" />
+            <input v-model="user.surname" type="text" placeholder="Surname" />
             <p v-if="error.surname" class="error">{{ error.surname }}</p>
           </div>
           <div>
             <p>Street</p>
-            <input v-model="street" type="text" placeholder="Street" />
+            <input v-model="user.street" type="text" placeholder="Street" />
             <p v-if="error.street" class="error">{{ error.street }}</p>
           </div>
           <div>
             <p>Home number</p>
-            <input v-model="homeNumber" type="text" placeholder="Home number" />
+            <input
+              v-model="user.homeNumber"
+              type="text"
+              placeholder="Home number"
+            />
             <p v-if="error.homeNumber" class="error">{{ error.homeNumber }}</p>
           </div>
           <div class="zipCode">
             <div class="zipCode_input">
               <p>Zip code</p>
               <input
-                v-model="zipCode"
+                v-model="user.zipCode"
                 @keypress="handleZipCode"
                 type="text"
                 placeholder="Zip Code"
@@ -36,7 +40,7 @@
             </div>
             <div class="city_input">
               <p>City</p>
-              <input v-model="city" type="text" placeholder="City" />
+              <input v-model="user.city" type="text" placeholder="City" />
             </div>
             <div>
               <p v-if="error.zipCode" class="error">
@@ -50,7 +54,7 @@
             <input
               @keypress="onlyNumber"
               type="text"
-              v-model="phone"
+              v-model="user.phone"
               placeholder="Phone"
             />
             <p v-if="error.phone" class="error">{{ error.phone }}</p>
@@ -74,6 +78,7 @@ import {
   validateCourierInputs,
   ErrorCourierModel
 } from "@/utils/validateRules";
+import UserCourierModel from "@/store/models/UserCourierModel";
 
 @Component({ components: { Modal } })
 export default class DeliveryMethod extends Vue {
@@ -81,14 +86,16 @@ export default class DeliveryMethod extends Vue {
   @Prop() selectedMethod!: DeliveryModel;
   @Prop() handleModal!: Function;
   @Prop() handleSelect!: Function;
+  user: UserCourierModel = {
+    name: "",
+    surname: "",
+    street: "",
+    homeNumber: null,
+    zipCode: "",
+    city: "",
+    phone: ""
+  };
 
-  name = "";
-  surname = "";
-  street = "";
-  homeNumber: number | null = null;
-  zipCode = "";
-  city = "";
-  phone = "";
   error: ErrorCourierModel = {
     name: null,
     surname: null,
@@ -99,31 +106,35 @@ export default class DeliveryMethod extends Vue {
     phone: null
   };
 
+  //Check if input for zipCode contains only number and exactly 6 characters
+  //This method add "-" when input have minimum 2 characters
   handleZipCode($event) {
+    const eventLength = $event.target.value.length;
     const keyCode = $event.keyCode ? $event.keyCode : $event.which;
+
     if ((keyCode < 48 || keyCode > 57) && keyCode !== 46) {
       $event.preventDefault();
     }
-    if ($event.target.value.length == 2) {
-      this.zipCode = $event.target.value[0] + $event.target.value[1] + "-";
+    if (eventLength == 2) {
+      this.user.zipCode = $event.target.value[0] + $event.target.value[1] + "-";
     }
-    if ($event.target.value.length > 2) {
-      this.zipCode =
+    if (eventLength > 2) {
+      this.user.zipCode =
         $event.target.value[0] +
         $event.target.value[1] +
         "-" +
         $event.target.value.substring(3, $event.target.value.length);
     }
-    if (this.zipCode.length === 6) $event.preventDefault();
+    if (eventLength === 6) $event.preventDefault();
   }
 
-  //Check if input for phone contains only number and max 9 digits
+  //Check if input for phone contains only number and exactly 9 digits
   onlyNumber($event) {
     const keyCode = $event.keyCode ? $event.keyCode : $event.which;
     if ((keyCode < 48 || keyCode > 57) && keyCode !== 46) {
       $event.preventDefault();
     }
-    if (this.phone.length === 9) $event.preventDefault();
+    if (this.user.phone.length === 9) $event.preventDefault();
   }
 
   clearErrorMessages() {
@@ -139,26 +150,10 @@ export default class DeliveryMethod extends Vue {
   }
 
   handleSubmit() {
-    const { isValid, error } = validateCourierInputs({
-      name: this.name,
-      surname: this.surname,
-      street: this.street,
-      homeNumber: this.homeNumber,
-      zipCode: this.zipCode,
-      city: this.city,
-      phone: this.phone
-    });
+    const { isValid, error } = validateCourierInputs(this.user);
 
     if (isValid) {
-      shopCart.setUserData({
-        name: this.name,
-        surname: this.surname,
-        street: this.street,
-        homeNumber: this.homeNumber,
-        zipCode: this.zipCode,
-        city: this.city,
-        phone: this.phone
-      });
+      shopCart.setUserData(this.user);
       shopCart.setDeliveryMethod(this.selectedMethod);
       this.handleModal();
     } else {
@@ -200,6 +195,10 @@ export default class DeliveryMethod extends Vue {
   & .inputs {
     width: 400px;
     margin: 0 2rem;
+
+    @media screen and (max-width: 700px) {
+      width: 300px;
+    }
 
     & p {
       margin-left: 1rem;

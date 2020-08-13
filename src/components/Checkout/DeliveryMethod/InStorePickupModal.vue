@@ -10,19 +10,19 @@
         <div class="inputs">
           <div>
             <p>Name</p>
-            <input v-model="name" type="text" placeholder="Name" />
+            <input v-model="user.name" type="text" placeholder="Name" />
             <p v-if="error.name" class="error">{{ error.name }}</p>
           </div>
           <div>
             <p>Surname</p>
-            <input v-model="surname" type="text" placeholder="Surname" />
+            <input v-model="user.surname" type="text" placeholder="Surname" />
             <p v-if="error.surname" class="error">{{ error.surname }}</p>
           </div>
           <div>
             <p>Phone Number</p>
             <input
               type="text"
-              v-model="phone"
+              v-model="user.phone"
               @keypress="onlyNumber"
               placeholder="Phone"
             />
@@ -49,6 +49,7 @@ import {
 } from "@/utils/validateRules";
 import shopCart from "@/store/modules/shopCart";
 import DeliveryModel from "@/store/models/DeliveryModel";
+import UserInStoreModel from "@/store/models/UserInStoreModel";
 
 @Component({ components: { Modal } })
 export default class InStorePickupModal extends Vue {
@@ -56,9 +57,11 @@ export default class InStorePickupModal extends Vue {
   @Prop() selectedMethod!: DeliveryModel;
   @Prop() handleModal!: Function;
   @Prop() handleSelect!: Function;
-  name = "";
-  surname = "";
-  phone = "";
+  user: UserInStoreModel = {
+    name: "",
+    surname: "",
+    phone: ""
+  };
   error: ErrorInStorePickupModel = { name: null, surname: null, phone: null };
 
   //Check if input for phone contains only number and max 9 digits
@@ -67,7 +70,7 @@ export default class InStorePickupModal extends Vue {
     if ((keyCode < 48 || keyCode > 57) && keyCode !== 46) {
       $event.preventDefault();
     }
-    if (this.phone.length === 9) $event.preventDefault();
+    if (this.user.phone.length === 9) $event.preventDefault();
   }
 
   clearErrorMessages() {
@@ -84,18 +87,10 @@ export default class InStorePickupModal extends Vue {
 
   handleSubmit() {
     this.clearErrorMessages();
-    const { isValid, error } = validateInStorePickupInputs({
-      name: this.name,
-      surname: this.surname,
-      phone: this.phone
-    });
+    const { isValid, error } = validateInStorePickupInputs(this.user);
 
     if (isValid) {
-      shopCart.setUserData({
-        name: this.name,
-        surname: this.surname,
-        phone: this.phone
-      });
+      shopCart.setUserData(this.user);
       shopCart.setDeliveryMethod(this.selectedMethod);
       this.handleModal();
     } else {
@@ -128,6 +123,10 @@ export default class InStorePickupModal extends Vue {
   & .inputs {
     width: 400px;
     margin: 0 2rem;
+
+    @media screen and (max-width: 700px) {
+      width: 300px;
+    }
 
     & p {
       margin-left: 1rem;

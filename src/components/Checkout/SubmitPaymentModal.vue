@@ -67,6 +67,7 @@ import { validateBlik, ErrorCard, validateCard } from "@/utils/validateRules";
 import VCreditCard from "v-credit-card";
 import "v-credit-card/dist/VCreditCard.css";
 import { CREDIT_CARD, BANK_TRANSFER, BLIK } from "@/utils/payments";
+import { COLLECT_ON_DELIVERY } from "@/utils/deliveryMethods";
 
 @Component({ components: { Modal, VCreditCard } })
 export default class SubmitPaymentModal extends Vue {
@@ -131,7 +132,6 @@ export default class SubmitPaymentModal extends Vue {
     }
   }
   handleCardSubmit() {
-    console.log(this.cardNumber);
     const { isValid, error } = validateCard({
       name: this.name,
       expirationNumber: this.expiration,
@@ -150,7 +150,8 @@ export default class SubmitPaymentModal extends Vue {
   mounted() {
     document.documentElement.style.overflow = "hidden";
     //check if deliveryMethod is a collect on delivery
-    if (this.deliveryMethod.id === 2) {
+    //Collect on delivery don't need payment method so it's treated as sucessfully ordered
+    if (this.deliveryMethod.name === COLLECT_ON_DELIVERY) {
       this.isSubmitted = true;
     }
   }
@@ -205,10 +206,23 @@ export default class SubmitPaymentModal extends Vue {
 }
 .creditCard {
   width: 600px;
+
   font-family: $font-primary;
   display: flex;
   flex-wrap: nowrap;
   align-items: center;
+
+  @media screen and (max-width: 700px) {
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 550px;
+    height: 100vh;
+    overflow-y: scroll;
+  }
+
+  @media screen and (max-width: 550px) {
+    width: 400px;
+  }
 
   & .error {
     color: red;

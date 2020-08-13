@@ -20,24 +20,35 @@
           :key="method.id"
           @click="handleSelect(method)"
         >
-          <i
-            :class="{
-              active: selectedMethod && selectedMethod.id === method.id
-            }"
-            class="iconCircle fa fa-circle"
-          ></i>
-          {{ method.name }}
-          <div class="fillSpace">
-            <p
-              v-if="
-                address && selectedMethod && selectedMethod.id === method.id
-              "
-            >
-              Todo show address
-            </p>
+          <div class="method">
+            <i
+              :class="{
+                active: selectedMethod && selectedMethod.id === method.id
+              }"
+              class="iconCircle fa fa-circle"
+            ></i>
+            {{ method.name }}
+            <div class="fillSpace"></div>
+            <p>{{ method.timeInfo }}</p>
+            <p>{{ method.price }}</p>
           </div>
-          <p>{{ method.timeInfo }}</p>
-          <p>{{ method.price }}</p>
+          <div
+            class="userInfo"
+            v-if="address && selectedMethod && selectedMethod.id === method.id"
+          >
+            <div>
+              <p>{{ `${address.name} ${address.surname}` }}</p>
+              <p>{{ address.phone }}</p>
+            </div>
+            <div>
+              <p v-if="selectedMethod.name !== IN_STORE_PICKUP">
+                {{ `${address.street} ${address.homeNumber}` }}
+              </p>
+              <p v-if="selectedMethod.name !== IN_STORE_PICKUP">
+                {{ `${address.zipCode} ${address.city}` }}
+              </p>
+            </div>
+          </div>
         </li>
       </ul>
     </section>
@@ -50,7 +61,7 @@ import DeliveryModel from "@/store/models/DeliveryModel";
 import InStorePickupModal from "@/components/Checkout/DeliveryMethod/InStorePickupModal.vue";
 import CourierModal from "@/components/Checkout/DeliveryMethod/CourierModal.vue";
 import shopCart from "@/store/modules/shopCart";
-import { methods } from "@/utils/deliveryMethods";
+import { methods, IN_STORE_PICKUP } from "@/utils/deliveryMethods";
 
 @Component({ components: { InStorePickupModal, CourierModal } })
 export default class DeliveryMethod extends Vue {
@@ -58,6 +69,7 @@ export default class DeliveryMethod extends Vue {
   isCourierModalOpen = false;
   selectedMethod: DeliveryModel | null = null;
   methods: Array<DeliveryModel> = methods;
+  IN_STORE_PICKUP = IN_STORE_PICKUP;
 
   get address() {
     return shopCart.userData;
@@ -93,6 +105,10 @@ export default class DeliveryMethod extends Vue {
       display: flex;
       align-items: center;
       margin: 1rem 0;
+
+      @media screen and (max-width: 700px) {
+        margin: 1rem;
+      }
     }
     & h2 > .circle {
       display: inline-block;
@@ -109,34 +125,52 @@ export default class DeliveryMethod extends Vue {
   ul {
     margin-bottom: 3rem;
     margin-right: 2rem;
+
+    @media screen and (max-width: 700px) {
+      margin-left: 2rem;
+    }
     & li {
-      display: flex;
-      align-items: center;
-      padding: 2rem;
-      border: 1px solid black;
-      cursor: pointer;
+      & .method {
+        display: flex;
+        align-items: center;
+        padding: 2rem;
+        border: 1px solid black;
+        cursor: pointer;
 
-      &:hover .iconCircle {
-        color: grey;
-      }
+        &:hover .iconCircle {
+          color: grey;
+        }
 
-      & .iconCircle {
-        font-size: 2rem;
-        color: lightgray;
-        margin-right: 20px;
+        & .iconCircle {
+          font-size: 2rem;
+          color: lightgray;
+          margin-right: 20px;
 
-        &.active {
-          color: black;
+          &.active {
+            color: black;
+          }
+        }
+
+        & .fillSpace {
+          flex-grow: 1;
+        }
+
+        & p:last-child {
+          width: 80px;
+          text-align: end;
         }
       }
+      & .userInfo {
+        padding: 1rem;
+        display: flex;
 
-      & .fillSpace {
-        flex-grow: 1;
-      }
+        & p {
+          margin-bottom: 0.5rem;
+        }
 
-      & p:last-child {
-        width: 80px;
-        text-align: end;
+        & div {
+          flex-basis: 50%;
+        }
       }
     }
   }

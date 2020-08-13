@@ -45,6 +45,10 @@ export default class Payments extends Vue {
     display: flex;
     align-items: center;
     margin: 1rem 0;
+
+    @media screen and (max-width: 700px) {
+      margin: 1rem;
+    }
   }
   & h2 > .circle {
     display: inline-block;
@@ -61,6 +65,10 @@ export default class Payments extends Vue {
   ul {
     margin-bottom: 3rem;
     margin-right: 2rem;
+
+    @media screen and (max-width: 700px) {
+      margin-left: 2rem;
+    }
     & li {
       display: flex;
       align-items: center;
