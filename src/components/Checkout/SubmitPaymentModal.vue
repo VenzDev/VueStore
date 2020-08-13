@@ -4,7 +4,7 @@
       <div v-if="!isSubmitted">
         <div
           class="bankTransfer"
-          v-if="paymentMethod && paymentMethod.id === 0"
+          v-if="paymentMethod && paymentMethod.id === BANK_TRANSFER"
         >
           <h2>Bank Transfer (TODO)</h2>
           <div class="buttons">
@@ -12,7 +12,10 @@
             <button @click="handleSubmit">Finish</button>
           </div>
         </div>
-        <div class="blik" v-else-if="paymentMethod && paymentMethod.id === 1">
+        <div
+          class="blik"
+          v-else-if="paymentMethod && paymentMethod.id === BLIK"
+        >
           <h2>Blik</h2>
           <input v-model="blik" @keypress="onlyNumber" type="text" />
           <p class="error" v-if="error">{{ error }}</p>
@@ -23,7 +26,7 @@
         </div>
         <div
           class="creditCard"
-          v-else-if="paymentMethod && paymentMethod.id === 2"
+          v-else-if="paymentMethod && paymentMethod.id === CREDIT_CARD"
         >
           <VCreditCard @change="creditInfoChanged" />
           <div>
@@ -63,11 +66,17 @@ import DeliveryModel from "@/store/models/DeliveryModel";
 import { validateBlik, ErrorCard, validateCard } from "@/utils/validateRules";
 import VCreditCard from "v-credit-card";
 import "v-credit-card/dist/VCreditCard.css";
+import { CREDIT_CARD, BANK_TRANSFER, BLIK } from "@/utils/payments";
 
 @Component({ components: { Modal, VCreditCard } })
 export default class SubmitPaymentModal extends Vue {
   @Prop() handleModal!: Function;
   @Prop() deliveryMethod!: DeliveryModel;
+  //payment methods names
+  CREDIT_CARD: number = CREDIT_CARD;
+  BANK_TRANSFER: number = BANK_TRANSFER;
+  BLIK: number = BLIK;
+
   isSubmitted = false;
   blik = "";
   error: string | null = null;
@@ -77,6 +86,8 @@ export default class SubmitPaymentModal extends Vue {
     cardNumber: null,
     securityCode: null
   };
+
+  //card variables
   name = "";
   cardNumber = "";
   expiration = "";

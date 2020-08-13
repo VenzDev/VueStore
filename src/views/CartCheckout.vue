@@ -50,11 +50,12 @@
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
 import shopCart from "@/store/modules/shopCart";
-import DeliveryMethod from "@/components/DeliveryMethod.vue";
+import DeliveryMethod from "@/components/Checkout/DeliveryMethod";
 import UserCourierModel from "@/store/models/UserCourierModel";
 import UserInStoreModel from "@/store/models/UserInStoreModel";
-import Payments from "@/components/Payments.vue";
-import SubmitPaymentModal from "@/components/SubmitPaymentModal.vue";
+import Payments from "@/components/Checkout/Payments.vue";
+import SubmitPaymentModal from "@/components/Checkout/SubmitPaymentModal.vue";
+import { COLLECT_ON_DELIVERY } from "@/utils/deliveryMethods";
 
 @Component({
   components: { DeliveryMethod, Payments, SubmitPaymentModal }
@@ -62,6 +63,8 @@ import SubmitPaymentModal from "@/components/SubmitPaymentModal.vue";
 export default class CartCheckout extends Vue {
   userAddessData: UserCourierModel | UserInStoreModel | null = null;
   isSubmitModalOpen = false;
+  //delivery method name
+  COLLECT_ON_DELIVERY: string = COLLECT_ON_DELIVERY;
 
   handleModal() {
     this.isSubmitModalOpen = !this.isSubmitModalOpen;
@@ -85,7 +88,10 @@ export default class CartCheckout extends Vue {
   }
   //Check if is collect on delivery method selected (payment method is not necessary)
   get isCollectOnDelivery() {
-    if (shopCart.deliveryMethod && shopCart.deliveryMethod.id === 2)
+    if (
+      shopCart.deliveryMethod &&
+      shopCart.deliveryMethod.name === this.COLLECT_ON_DELIVERY
+    )
       return true;
     else return false;
   }

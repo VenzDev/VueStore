@@ -22,22 +22,15 @@
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
 import shopCart from "@/store/modules/shopCart";
-
-interface PaymentModel {
-  id: number;
-  name: string;
-}
+import PaymentMethod from "@/store/models/PaymentMethod";
+import { payments } from "@/utils/payments";
 
 @Component
 export default class Payments extends Vue {
-  payments: Array<PaymentModel> = [
-    { id: 0, name: "Bank transfer" },
-    { id: 1, name: "Blik" },
-    { id: 2, name: "Credit Card" }
-  ];
-  selectedPayment: PaymentModel | null = null;
+  payments: Array<PaymentMethod> = payments;
+  selectedPayment: PaymentMethod | null = null;
 
-  handleSelect(payment: PaymentModel) {
+  handleSelect(payment: PaymentMethod) {
     this.selectedPayment = payment;
     shopCart.setPaymentMethod(payment);
   }

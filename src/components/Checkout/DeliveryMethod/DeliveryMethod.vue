@@ -28,7 +28,11 @@
           ></i>
           {{ method.name }}
           <div class="fillSpace">
-            <p v-if="address && selectedMethod.id === method.id">
+            <p
+              v-if="
+                address && selectedMethod && selectedMethod.id === method.id
+              "
+            >
               Todo show address
             </p>
           </div>
@@ -43,15 +47,17 @@
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
 import DeliveryModel from "@/store/models/DeliveryModel";
-import InStorePickupModal from "@/components/InStorePickupModal.vue";
-import CourierModal from "@/components/CourierModal.vue";
+import InStorePickupModal from "@/components/Checkout/DeliveryMethod/InStorePickupModal.vue";
+import CourierModal from "@/components/Checkout/DeliveryMethod/CourierModal.vue";
 import shopCart from "@/store/modules/shopCart";
+import { methods } from "@/utils/deliveryMethods";
 
 @Component({ components: { InStorePickupModal, CourierModal } })
 export default class DeliveryMethod extends Vue {
   isInStoreModalOpen = false;
   isCourierModalOpen = false;
   selectedMethod: DeliveryModel | null = null;
+  methods: Array<DeliveryModel> = methods;
 
   get address() {
     return shopCart.userData;
@@ -63,17 +69,6 @@ export default class DeliveryMethod extends Vue {
   handleCourierModal() {
     this.isCourierModalOpen = !this.isCourierModalOpen;
   }
-
-  methods: Array<DeliveryModel> = [
-    { id: 0, name: "In-store pickup", timeInfo: "1-2 days", price: "$0" },
-    { id: 1, name: "Standard Courier", timeInfo: "2-3 days", price: "$6.99" },
-    {
-      id: 2,
-      name: "Collect on Delivery",
-      timeInfo: "1-2 days",
-      price: "$12.99"
-    }
-  ];
 
   handleSelect(method: DeliveryModel | null) {
     if (method === null) {
