@@ -81,7 +81,9 @@ export default class CartCheckout extends Vue {
   }
   get totalPrice() {
     // eslint-disable-next-line
-    return parseFloat(this.deliveryMethod!.price.substr(1)) + this.itemsPrice;
+    return (
+      parseFloat(this.deliveryMethod!.price.substr(1)) + this.itemsPrice
+    ).toFixed(2);
   }
   get userData() {
     return shopCart.userData;
