@@ -46,7 +46,7 @@ import Modal from "@/components/Modal.vue";
 import {
   ErrorInStorePickupModel,
   validateInStorePickupInputs
-} from "@/utils/validateRules";
+} from "@/utils/validators/validateInStorePickupInputs";
 import shopCart from "@/store/modules/shopCart";
 import DeliveryModel from "@/store/models/DeliveryModel";
 import UserInStoreModel from "@/store/models/UserInStoreModel";

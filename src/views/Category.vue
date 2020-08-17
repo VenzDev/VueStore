@@ -37,7 +37,7 @@ import { Vue, Component, Watch } from "vue-property-decorator";
 import { getCategoryItems } from "@/store/api";
 import LoadingSpinner from "@/components/LoadingSpinner.vue";
 import ItemModel from "@/store/models/ItemModel";
-import validateCategoryUrl from "@/utils/validateCategoryUrl";
+import validateCategoryUrl from "@/utils/validators/validateCategoryUrl";
 import "vue-slider-component/theme/antd.css";
 import VueSlider from "vue-slider-component";
 import AddToCartModal from "@/components/AddToCartModal.vue";

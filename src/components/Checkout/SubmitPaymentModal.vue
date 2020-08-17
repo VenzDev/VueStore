@@ -63,7 +63,11 @@ import { Vue, Component, Prop } from "vue-property-decorator";
 import Modal from "@/components/Modal.vue";
 import shopCart from "@/store/modules/shopCart";
 import DeliveryModel from "@/store/models/DeliveryModel";
-import { validateBlik, ErrorCard, validateCard } from "@/utils/validateRules";
+import {
+  validateBlik,
+  ErrorCard,
+  validateCard
+} from "@/utils/validators/validateCard";
 import VCreditCard from "v-credit-card";
 import "v-credit-card/dist/VCreditCard.css";
 import { CREDIT_CARD, BANK_TRANSFER, BLIK } from "@/utils/payments";

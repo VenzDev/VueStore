@@ -6,22 +6,38 @@
         <div class="inputs">
           <div>
             <p>Name</p>
-            <input v-model="user.name" type="text" placeholder="Name" />
+            <input
+              :class="{ error: error.name }"
+              v-model="user.name"
+              type="text"
+              placeholder="Name"
+            />
             <p v-if="error.name" class="error">{{ error.name }}</p>
           </div>
           <div>
             <p>Surname</p>
-            <input v-model="user.surname" type="text" placeholder="Surname" />
+            <input
+              :class="{ error: error.surname }"
+              v-model="user.surname"
+              type="text"
+              placeholder="Surname"
+            />
             <p v-if="error.surname" class="error">{{ error.surname }}</p>
           </div>
           <div>
             <p>Street</p>
-            <input v-model="user.street" type="text" placeholder="Street" />
+            <input
+              :class="{ error: error.street }"
+              v-model="user.street"
+              type="text"
+              placeholder="Street"
+            />
             <p v-if="error.street" class="error">{{ error.street }}</p>
           </div>
           <div>
             <p>Home number</p>
             <input
+              :class="{ error: error.homeNumber }"
               v-model="user.homeNumber"
               type="text"
               placeholder="Home number"
@@ -32,15 +48,22 @@
             <div class="zipCode_input">
               <p>Zip code</p>
               <input
+                :class="{ error: error.zipCode }"
                 v-model="user.zipCode"
                 @keypress="handleZipCode"
                 type="text"
+                name="zipCode"
                 placeholder="Zip Code"
               />
             </div>
             <div class="city_input">
               <p>City</p>
-              <input v-model="user.city" type="text" placeholder="City" />
+              <input
+                :class="{ error: error.city }"
+                v-model="user.city"
+                type="text"
+                placeholder="City"
+              />
             </div>
             <div>
               <p v-if="error.zipCode" class="error">
@@ -50,8 +73,9 @@
             </div>
           </div>
           <div>
-            <p>Home number</p>
+            <p>Phone number</p>
             <input
+              :class="{ error: error.phone }"
               @keypress="onlyNumber"
               type="text"
               v-model="user.phone"
@@ -77,7 +101,7 @@ import shopCart from "@/store/modules/shopCart";
 import {
   validateCourierInputs,
   ErrorCourierModel
-} from "@/utils/validateRules";
+} from "@/utils/validators/validateCourierInputs";
 import UserCourierModel from "@/store/models/UserCourierModel";
 
 @Component({ components: { Modal } })
@@ -90,7 +114,7 @@ export default class DeliveryMethod extends Vue {
     name: "",
     surname: "",
     street: "",
-    homeNumber: null,
+    homeNumber: "",
     zipCode: "",
     city: "",
     phone: ""
@@ -181,6 +205,10 @@ export default class DeliveryMethod extends Vue {
       document.documentElement.style.overflow = "hidden";
     } else document.documentElement.style.overflow = "auto";
   }
+  @Watch("user", { deep: true })
+  watchUserData() {
+    console.log("xd");
+  }
 }
 </script>
 
@@ -219,12 +247,26 @@ export default class DeliveryMethod extends Vue {
     }
 
     & input {
+      font-family: $font-primary;
       display: block;
       border: 1px solid black;
       width: 100%;
       font-size: 1rem;
       padding: 0.5rem 1rem;
       margin-bottom: 0.5rem;
+
+      &.error {
+        outline: none;
+        color: black;
+        border: 1px solid red;
+        font-size: 1rem;
+        font-weight: normal;
+        &:focus {
+          outline: solid;
+          outline-color: red;
+          outline-width: 1px;
+        }
+      }
     }
     & .buttons {
       display: flex;
