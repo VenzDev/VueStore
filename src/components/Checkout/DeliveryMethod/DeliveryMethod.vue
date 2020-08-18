@@ -40,11 +40,11 @@
               <p>{{ `${address.name} ${address.surname}` }}</p>
               <p>{{ address.phone }}</p>
             </div>
-            <div>
-              <p v-if="selectedMethod.name !== IN_STORE_PICKUP">
+            <div v-if="selectedMethod.name !== IN_STORE_PICKUP">
+              <p>
                 {{ `${address.street} ${address.homeNumber}` }}
               </p>
-              <p v-if="selectedMethod.name !== IN_STORE_PICKUP">
+              <p>
                 {{ `${address.zipCode} ${address.city}` }}
               </p>
             </div>

@@ -227,13 +227,9 @@ export default class SubmitPaymentModal extends Vue {
   @media screen and (max-width: 550px) {
     width: 400px;
   }
-  & .vue-credit-card {
-    color: red !important;
-  }
 
   & .error {
-    color: red;
-    margin-bottom: 0.5rem;
+    @include error;
     font-size: 1rem;
   }
 }

@@ -170,26 +170,7 @@ export default class InStorePickupModal extends Vue {
     }
 
     & input {
-      display: block;
-      border: 1px solid black;
-      width: 100%;
-      font-size: 1rem;
-      margin: 0.5rem auto;
-      padding: 0.5rem 1rem;
-
-      &.error {
-        outline: none;
-        color: black;
-        border: 1px solid red;
-        font-size: 1rem;
-        margin: 0.5rem auto;
-        font-weight: normal;
-        &:focus {
-          outline: solid;
-          outline-color: red;
-          outline-width: 1px;
-        }
-      }
+      @include input;
     }
     & .buttons {
       display: flex;
@@ -198,11 +179,7 @@ export default class InStorePickupModal extends Vue {
 
       & button {
         flex-basis: 50%;
-        padding: 0.5rem 1rem;
-        font-family: $font-secondary;
-        font-size: 1rem;
-        border: none;
-        cursor: pointer;
+        @include button-primary;
       }
       & button:nth-child(2) {
         background-color: black;
@@ -211,10 +188,7 @@ export default class InStorePickupModal extends Vue {
     }
 
     & .error {
-      font-size: 0.8rem;
-      color: red;
-      font-weight: bold;
-      margin-bottom: 0.5rem;
+      @include error;
     }
   }
 }

@@ -1,0 +1,36 @@
+@mixin input {
+  font-family: $font-primary;
+  display: block;
+  border: 1px solid black;
+  width: 100%;
+  font-size: 1rem;
+  padding: 0.5rem 1rem;
+  margin-bottom: 0.5rem;
+
+  &.error {
+    outline: none;
+    color: black;
+    border: 1px solid red;
+    font-size: 1rem;
+    font-weight: normal;
+    &:focus {
+      outline: solid;
+      outline-color: red;
+      outline-width: 1px;
+    }
+  }
+}
+@mixin error {
+  font-size: 0.8rem;
+  color: red;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+@mixin button-primary {
+  padding: 0.5rem 1rem;
+  font-family: $font-secondary;
+  font-size: 1rem;
+  border: none;
+  cursor: pointer;
+}

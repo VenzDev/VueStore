@@ -96,23 +96,12 @@ export default class AddToCartModal extends Vue {
     }
   }
 
-  & input {
-    display: block;
-    font-size: 1rem;
-    margin-bottom: 1rem;
-    border: 1px solid black;
-    padding: 0.5rem;
-  }
   & .buttons {
     display: flex;
 
     & button {
       flex: 50%;
-      border: none;
-      font-family: "Roboto", sans-serif;
-      font-size: 1rem;
-      padding: 0.5rem 1rem;
-      cursor: pointer;
+      @include button-primary;
     }
     & button:nth-child(1) {
       color: white;
