@@ -48,28 +48,70 @@ export const validateSecurityCode = (securityCode: string) => {
 };
 export const validateCardNumber = (cNum: string) => {
   let error: string | null = null;
-  console.log(cNum);
   if (cNum.length === 0) {
     error = "Card number cannot be empty";
   } else {
     //Card recognition
-    //Support for American Express, Visa, MasterCard, Discover, Diners Club, JCB
+    //Support for American Express, Visa, MasterCard, Discover, Diners Club, JCB, maestro
+    const _2digitsPrefix = parseInt(cNum.substring(0, 2));
+    const _3digitsPrefix = parseInt(cNum.substring(0, 3));
+    const _4digitsPrefix = parseInt(cNum.substring(0, 4));
+    const _6digitsPrefix = parseInt(cNum.substring(0, 6));
+
+    const americanExpress =
+      (_2digitsPrefix == 34 || _2digitsPrefix == 37) && cNum.length === 15;
+
+    const visa =
+      parseInt(cNum[0]) == 4 &&
+      (cNum.length == 13 || cNum.length == 16 || cNum.length == 19);
+
+    const masterCard =
+      ((_2digitsPrefix >= 51 && _2digitsPrefix <= 55) ||
+        (_6digitsPrefix >= 222100 && _6digitsPrefix <= 272099)) &&
+      cNum.length === 16;
+
+    const discover =
+      (_4digitsPrefix === 6011 ||
+        (_6digitsPrefix >= 622126 && _6digitsPrefix <= 622925) ||
+        (_3digitsPrefix >= 644 && _3digitsPrefix <= 649) ||
+        _2digitsPrefix === 65) &&
+      (cNum.length === 16 || cNum.length === 19);
+
+    const dinersClub =
+      (_2digitsPrefix === 36 && cNum.length === 14) ||
+      (_2digitsPrefix === 54 && cNum.length === 16) ||
+      (_3digitsPrefix >= 300 && _3digitsPrefix <= 305 && cNum.length === 14);
+
+    const jcb =
+      _4digitsPrefix >= 3528 &&
+      _4digitsPrefix <= 3589 &&
+      (cNum.length === 16 || cNum.length === 19);
+
+    const maestro =
+      (_4digitsPrefix === 5018 ||
+        _4digitsPrefix === 5020 ||
+        _4digitsPrefix === 5038 ||
+        _4digitsPrefix === 5893 ||
+        _4digitsPrefix === 6304 ||
+        _4digitsPrefix === 6759 ||
+        _4digitsPrefix === 6761 ||
+        _4digitsPrefix === 6762 ||
+        _4digitsPrefix === 6763) &&
+      (cNum.length === 14 || cNum.length === 16);
+
     if (
       !(
-        (checkLuhn(cNum) &&
-          cNum.length == 16 &&
-          (cNum[0] == "4" ||
-            (cNum[0] == "5" &&
-              parseInt(cNum[1]) >= 1 &&
-              parseInt(cNum[1]) <= 5) ||
-            cNum.indexOf("6011") == 0 ||
-            cNum.indexOf("65") == 0)) ||
-        (cNum.length == 15 &&
-          (cNum.indexOf("34") == 0 || cNum.indexOf("37") == 0)) ||
-        (cNum.length == 13 && cNum[0] == "4")
+        checkLuhn(cNum) &&
+        (americanExpress ||
+          visa ||
+          masterCard ||
+          discover ||
+          dinersClub ||
+          jcb ||
+          maestro)
       )
     )
-      error = "Invalid card number";
+      error = "Invalid credit card number";
   }
   if (cNum.length > 20) error = "Invalid card Number";
   return error;
