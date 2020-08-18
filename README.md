@@ -1,7 +1,7 @@
 # vue-store
 
 ## demo 
-## https://festive-wescoff-ff3c22.netlify.app
+## https://pedantic-goldberg-ab4e5f.netlify.app/
 
 ## Project setup
 ```
