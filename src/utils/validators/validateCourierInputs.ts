@@ -9,7 +9,6 @@ export interface ErrorCourierModel {
   phone: string | null;
   city: string | null;
 }
-
 const phoneReg = new RegExp("[0-9]{9}");
 const nameReg = new RegExp(
   "^[A-Za-zżźćńółęąśŻŹĆĄŚĘŁÓŃ][A-Za-zżźćńółęąśŻŹĆĄŚĘŁÓŃ'. -]{0,19}$"
@@ -24,51 +23,51 @@ const streetReg = new RegExp(
 const homeNumberReg = new RegExp("[0-9a-zA-Z]{1,5}");
 const zipCodeReg = new RegExp("[0-9]{2}-[0-9]{3}");
 
-const validatePhone = (phoneNumber: string) => {
+export const validatePhone = (phoneNumber: string) => {
   let error: string | null = null;
-  if (!phoneReg.test(phoneNumber.trim())) error = "Invalid value";
-  if (phoneNumber.trim().length === 0) error = "Input cannot be empty";
-  if (phoneNumber.trim().length > 9) error = "Too long value";
+  if (!phoneReg.test(phoneNumber)) error = "Invalid phone number";
+  if (phoneNumber.length === 0) error = "Phone number cannot be empty";
+  if (phoneNumber.length > 9) error = "Too long phone number";
   return error;
 };
 
-const validateZipCode = (zipCode: string) => {
+export const validateZipCode = (zipCode: string) => {
   let error: string | null = null;
-  if (!zipCodeReg.test(zipCode.trim())) error = "zipCode must be (xx-yyy)";
-  if (zipCode.trim().length === 0) error = "Input cannot be empty";
-  if (zipCode.trim().length > 6) error = "Too long value";
+  if (!zipCodeReg.test(zipCode)) error = "zipCode must be (xx-yyy)";
+  if (zipCode.length === 0) error = "zipCode cannot be empty";
+  if (zipCode.length > 6) error = "Too long zipCode";
   return error;
 };
 
-const validateName = (text: string) => {
+export const validateName = (text: string) => {
   let error: string | null = null;
-  if (!nameReg.test(text.trim())) error = "Invalid value";
-  if (text.trim().length === 0) error = "Input cannot be empty";
-  if (text.trim().length > 20) error = "Too long value";
+  if (!nameReg.test(text)) error = "Invalid name";
+  if (text.length === 0) error = "Name cannot be empty";
+  if (text.length > 20) error = "Too long name";
   return error;
 };
 
-const validateSurname = (text: string) => {
+export const validateSurname = (text: string) => {
   let error: string | null = null;
-  if (!surnameReg.test(text.trim())) error = "Invalid value";
-  if (text.trim().length === 0) error = "Input cannot be empty";
-  if (text.trim().length > 40) error = "Too long value";
+  if (!surnameReg.test(text)) error = "Invalid surname";
+  if (text.length === 0) error = "Surname cannot be empty";
+  if (text.length > 40) error = "Too long surname";
   return error;
 };
 
-const validateStreetAndCity = (text: string) => {
+export const validateStreetAndCity = (text: string) => {
   let error: string | null = null;
-  if (!streetReg.test(text.trim())) error = "Invalid value";
-  if (text.trim().length === 0) error = "Input cannot be empty";
-  if (text.trim().length > 40) error = "Too long value";
+  if (!streetReg.test(text)) error = "Invalid value";
+  if (text.length === 0) error = "Input cannot be empty";
+  if (text.length > 40) error = "Too long value";
   return error;
 };
 
-const validateHomeNumber = (text: string) => {
+export const validateHomeNumber = (text: string) => {
   let error: string | null = null;
-  if (!homeNumberReg.test(text.trim())) error = "Invalid value";
-  if (text.trim().length === 0) error = "Input cannot be empty";
-  if (text.trim().length > 5) error = "Too long value";
+  if (!homeNumberReg.test(text)) error = "Invalid home number";
+  if (text.length === 0) error = "Home number cannot be empty";
+  if (text.length > 5) error = "Too long home number";
   return error;
 };
 

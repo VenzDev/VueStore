@@ -10,18 +10,29 @@
         <div class="inputs">
           <div>
             <p>Name</p>
-            <input v-model="user.name" type="text" placeholder="Name" />
+            <input
+              :class="{ error: error.name }"
+              v-model="user.name"
+              type="text"
+              placeholder="Name"
+            />
             <p v-if="error.name" class="error">{{ error.name }}</p>
           </div>
           <div>
             <p>Surname</p>
-            <input v-model="user.surname" type="text" placeholder="Surname" />
+            <input
+              :class="{ error: error.surname }"
+              v-model="user.surname"
+              type="text"
+              placeholder="Surname"
+            />
             <p v-if="error.surname" class="error">{{ error.surname }}</p>
           </div>
           <div>
             <p>Phone Number</p>
             <input
               type="text"
+              :class="{ error: error.phone }"
               v-model="user.phone"
               @keypress="onlyNumber"
               placeholder="Phone"
@@ -45,7 +56,9 @@ import { Vue, Component, Prop, Watch } from "vue-property-decorator";
 import Modal from "@/components/Modal.vue";
 import {
   ErrorInStorePickupModel,
-  validateInStorePickupInputs
+  validateInStorePickupInputs,
+  validateName,
+  validateSurname
 } from "@/utils/validators/validateInStorePickupInputs";
 import shopCart from "@/store/modules/shopCart";
 import DeliveryModel from "@/store/models/DeliveryModel";
@@ -85,8 +98,15 @@ export default class InStorePickupModal extends Vue {
     this.handleModal();
   }
 
+  removeSpaces() {
+    this.user.name = this.user.name.trim();
+    this.user.surname = this.user.surname.trim();
+    this.user.phone = this.user.phone.trim();
+  }
+
   handleSubmit() {
     this.clearErrorMessages();
+    this.removeSpaces();
     const { isValid, error } = validateInStorePickupInputs(this.user);
 
     if (isValid) {
@@ -108,6 +128,22 @@ export default class InStorePickupModal extends Vue {
       shopCart.setUserData(null);
       shopCart.setDeliveryMethod(null);
     } else document.documentElement.style.overflow = "auto";
+  }
+  @Watch("user.name")
+  watchName() {
+    this.error.name = validateName(this.user.name);
+  }
+  @Watch("user.surname")
+  watchSurname() {
+    this.error.surname = validateSurname(this.user.surname);
+  }
+  @Watch("user.phone")
+  watchPhone() {
+    if (this.user.phone.trim().length === 0)
+      this.error.phone = "Phone cannot be empty";
+    else if (this.user.phone.trim().length > 9)
+      this.error.phone = "Invalid value";
+    else this.error.phone = null;
   }
 }
 </script>
@@ -140,6 +176,20 @@ export default class InStorePickupModal extends Vue {
       font-size: 1rem;
       margin: 0.5rem auto;
       padding: 0.5rem 1rem;
+
+      &.error {
+        outline: none;
+        color: black;
+        border: 1px solid red;
+        font-size: 1rem;
+        margin: 0.5rem auto;
+        font-weight: normal;
+        &:focus {
+          outline: solid;
+          outline-color: red;
+          outline-width: 1px;
+        }
+      }
     }
     & .buttons {
       display: flex;
@@ -164,7 +214,7 @@ export default class InStorePickupModal extends Vue {
       font-size: 0.8rem;
       color: red;
       font-weight: bold;
-      margin-bottom: 1rem;
+      margin-bottom: 0.5rem;
     }
   }
 }

@@ -7,9 +7,35 @@ export interface ErrorInStorePickupModel {
 }
 
 const phoneReg = new RegExp("[0-9]{9}");
+const nameReg = new RegExp(
+  "^[A-Za-zżźćńółęąśŻŹĆĄŚĘŁÓŃ][A-Za-zżźćńółęąśŻŹĆĄŚĘŁÓŃ'. -]{0,19}$"
+);
+const surnameReg = new RegExp(
+  "^[A-Za-zżźćńółęąśŻŹĆĄŚĘŁÓŃ][A-Za-zżźćńółęąśŻŹĆĄŚĘŁÓŃ'. -]{0,39}$"
+);
 
 export const validatePhone = (phoneNumber: string) => {
-  return phoneReg.test(phoneNumber);
+  let error: string | null = null;
+  if (!phoneReg.test(phoneNumber)) error = "Invalid value";
+  if (phoneNumber.length === 0) error = "Input cannot be empty";
+  if (phoneNumber.length > 9) error = "Too long value";
+  return error;
+};
+
+export const validateName = (text: string) => {
+  let error: string | null = null;
+  if (!nameReg.test(text)) error = "Invalid value";
+  if (text.length === 0) error = "Input cannot be empty";
+  if (text.length > 20) error = "Too long value";
+  return error;
+};
+
+export const validateSurname = (text: string) => {
+  let error: string | null = null;
+  if (!surnameReg.test(text)) error = "Invalid value";
+  if (text.length === 0) error = "Input cannot be empty";
+  if (text.length > 40) error = "Too long value";
+  return error;
 };
 
 export const validateInStorePickupInputs = (userInputs: UserInStoreModel) => {
@@ -19,12 +45,10 @@ export const validateInStorePickupInputs = (userInputs: UserInStoreModel) => {
     phone: null
   };
   const { name, surname, phone } = userInputs;
-  if (name.trim().length === 0) error.name = "Name cannot be empty";
-  if (surname.trim().length === 0) error.surname = "Surname cannot be empty";
-  if (phone.trim().length === 0) error.phone = "Phone number cannot be empty";
 
-  if (!validatePhone(phone))
-    error.phone = "Phone number must contain exactly 9 digits";
+  error.name = validateName(name);
+  error.surname = validateSurname(surname);
+  error.phone = validatePhone(phone);
 
   if (error.name === null && error.surname === null && error.phone === null) {
     return { isValid: true, error };

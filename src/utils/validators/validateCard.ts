@@ -1,7 +1,15 @@
 import CardModel from "@/store/models/CardModel";
 
 const blikReg = new RegExp("[0-9]{6}");
-const expirationCardReg = new RegExp("[0-9]{2}/[0-9]{2}");
+const expirationCardReg = new RegExp("^[01][0-9]{1}/[2-9][0-9]");
+const nameReg = new RegExp(
+  "^[A-Za-zżźćńółęąśŻŹĆĄŚĘŁÓŃ][A-Za-zżźćńółęąśŻŹĆĄŚĘŁÓŃ'. -]{0,25}$"
+);
+const securityCodeReg = new RegExp("[0-9]{2,4}");
+
+export const validateBlik = (blik: string) => {
+  return blikReg.test(blik);
+};
 
 export interface ErrorCard {
   name: string | null;
@@ -11,13 +19,10 @@ export interface ErrorCard {
 }
 
 const checkLuhn = (cardNumber: string): boolean => {
-  //delete spaces from string
-  const cNum = cardNumber.split(" ").join("");
-
   let s = 0;
   let doubleDigit = false;
-  for (let i = cNum.length - 1; i >= 0; i--) {
-    let digit = +cNum[i];
+  for (let i = cardNumber.length - 1; i >= 0; i--) {
+    let digit = +cardNumber[i];
     if (doubleDigit) {
       digit *= 2;
       if (digit > 9) digit -= 9;
@@ -27,54 +32,80 @@ const checkLuhn = (cardNumber: string): boolean => {
   }
   return s % 10 == 0;
 };
-
-export const validateBlik = (blik: string) => {
-  return blikReg.test(blik);
-};
-
-export const validateCardNumber = (cardNumber: string) => {
-  const cNum = cardNumber.split(" ").join("");
-
+export const validateName = (name: string) => {
   let error: string | null = null;
-  if (!checkLuhn(cNum)) {
-    error = "Invalid card Number";
-    return { isNumberValid: false, cardNumberError: error };
-  }
-  //American Express: Starting with 34 or 37, length 15 digits.
-  if (
-    (cNum.indexOf("34") === 0 || cNum.indexOf("37") === 0) &&
-    cNum.length !== 15
-  )
-    error = "American Express card must contain exactly 15 digits";
-
-  //Visa: Starting with 4, length 13 or 16 digits.
-  if (cNum[0] === "4" && cNum.length !== 13 && cNum.length !== 16)
-    error = "Visa card must contain exactly 13 or 16 digits";
-
-  //MasterCard: Starting with 51-55 and 222100-272099, length 16 digits.
-  const _51_55 =
-    parseInt(cNum[0] + cNum[1]) >= 51 && parseInt(cNum[0] + cNum[1]) <= 55;
-  const _222100_272099 =
-    parseInt(cNum.substring(0, 6)) >= 222100 &&
-    parseInt(cNum.substring(0, 6)) <= 272099;
-
-  if ((_51_55 || _222100_272099) && cNum.length !== 16)
-    error = "MasterCard card must contain exactly 16 digits";
-
-  if (error) {
-    return { isNumberValid: false, cardNumberError: error };
-  } else {
-    return { isNumberValid: true, cardNumberError: error };
-  }
+  if (!nameReg.test(name)) error = "Invalid name";
+  else if (name.length === 0) error = "Name cannot be empty";
+  else if (name.length > 25) error = "Invalid name";
+  return error;
 };
-const phoneReg = new RegExp("[0-9]{9}");
-
-export const validatePhone = (phoneNumber: string) => {
-  return phoneReg.test(phoneNumber);
+export const validateSecurityCode = (securityCode: string) => {
+  let error: string | null = null;
+  if (!securityCodeReg.test(securityCode)) error = "Invalid security code";
+  else if (securityCode.length === 0) error = "Security code cannot be empty";
+  else if (securityCode.length > 4) error = "Invalid security code";
+  return error;
+};
+export const validateCardNumber = (cNum: string) => {
+  let error: string | null = null;
+  console.log(cNum);
+  if (cNum.length === 0) {
+    error = "Card number cannot be empty";
+  } else {
+    //Card recognition
+    //Support for American Express, Visa, MasterCard, Discover, Diners Club, JCB
+    if (
+      !(
+        (checkLuhn(cNum) &&
+          cNum.length == 16 &&
+          (cNum[0] == "4" ||
+            (cNum[0] == "5" &&
+              parseInt(cNum[1]) >= 1 &&
+              parseInt(cNum[1]) <= 5) ||
+            cNum.indexOf("6011") == 0 ||
+            cNum.indexOf("65") == 0)) ||
+        (cNum.length == 15 &&
+          (cNum.indexOf("34") == 0 || cNum.indexOf("37") == 0)) ||
+        (cNum.length == 13 && cNum[0] == "4")
+      )
+    )
+      error = "Invalid card number";
+  }
+  if (cNum.length > 20) error = "Invalid card Number";
+  return error;
 };
 
 export const validateExpirationCard = (expirationNumber: string) => {
-  return expirationCardReg.test(expirationNumber);
+  let error: string | null = null;
+  if (!expirationCardReg.test(expirationNumber)) error = "Invalid expiration";
+  else {
+    const maxValidYear = 10;
+    const date = new Date();
+    const currentYear = date.getFullYear() - 2000;
+    const currentMonth = date.getMonth() + 1;
+
+    const cardDate = expirationNumber.split("/");
+
+    if (parseInt(cardDate[1]) > currentYear) {
+      if (
+        !(
+          parseInt(cardDate[1]) <= currentYear + maxValidYear &&
+          parseInt(cardDate[0]) >= 0 &&
+          parseInt(cardDate[0]) <= 12
+        )
+      )
+        error = "Invalid expiration";
+    } else if (parseInt(cardDate[1]) === currentYear) {
+      if (
+        !(parseInt(cardDate[0]) >= currentMonth && parseInt(cardDate[0]) <= 12)
+      )
+        error = "Card has expired";
+    } else error = "Card has expired";
+  }
+  if (expirationNumber.trim().length === 0)
+    error = "Expiration cannot be empty";
+
+  return error;
 };
 
 export const validateCard = (cardInputs: CardModel) => {
@@ -85,20 +116,18 @@ export const validateCard = (cardInputs: CardModel) => {
     securityCode: null
   };
   const { name, expirationNumber, cardNumber, securityCode } = cardInputs;
-  if (name.trim().length === 0) error.name = "Name cannot be empty";
-  //if (!validateCardNumber(cardNumber))
-  //  error.cardNumber = "Card Number must contain exactly 16 digits";
-  if (cardNumber.trim().length === 0)
-    error.cardNumber = "Card Number cannot be empty";
-  if (!validateExpirationCard(expirationNumber))
-    error.expirationNumber = "Expiration must be (MM/YY)";
-  if (expirationNumber.trim().length === 0)
-    error.expirationNumber = "Expiration number cannot be empty";
-  if (securityCode.trim().length === 0)
-    error.securityCode = "Security Code cannot be empty";
 
-  const { isNumberValid, cardNumberError } = validateCardNumber(cardNumber);
-  if (!isNumberValid) error.cardNumber = cardNumberError;
+  error.expirationNumber = validateExpirationCard(expirationNumber);
+  error.securityCode = validateSecurityCode(securityCode);
+  error.name = validateName(name);
+
+  //security code requires removing spaces beetween numbers
+  error.cardNumber = validateCardNumber(
+    cardNumber
+      .trim()
+      .split(" ")
+      .join("")
+  );
 
   if (
     !error.name &&

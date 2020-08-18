@@ -129,7 +129,7 @@ export default class SubmitPaymentModal extends Vue {
   handleBlikSubmit() {
     this.error = null;
     if (this.blik.trim().length === 0) this.error = "Blik cannot be empty";
-    if (!validateBlik(this.blik))
+    if (!validateBlik(this.blik.trim()))
       this.error = "Blik must contain exactly 6 digits";
     if (!this.error) {
       this.isSubmitted = true;
@@ -137,10 +137,10 @@ export default class SubmitPaymentModal extends Vue {
   }
   handleCardSubmit() {
     const { isValid, error } = validateCard({
-      name: this.name,
-      expirationNumber: this.expiration,
-      securityCode: this.security,
-      cardNumber: this.cardNumber
+      name: this.name.trim(),
+      expirationNumber: this.expiration.trim(),
+      securityCode: this.security.trim(),
+      cardNumber: this.cardNumber.trim()
     });
     if (isValid) this.isSubmitted = true;
     else this.cardError = error;
@@ -226,6 +226,9 @@ export default class SubmitPaymentModal extends Vue {
 
   @media screen and (max-width: 550px) {
     width: 400px;
+  }
+  & .vue-credit-card {
+    color: red !important;
   }
 
   & .error {

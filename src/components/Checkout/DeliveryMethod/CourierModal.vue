@@ -100,7 +100,11 @@ import DeliveryModel from "@/store/models/DeliveryModel";
 import shopCart from "@/store/modules/shopCart";
 import {
   validateCourierInputs,
-  ErrorCourierModel
+  ErrorCourierModel,
+  validateName,
+  validateSurname,
+  validateStreetAndCity,
+  validateHomeNumber
 } from "@/utils/validators/validateCourierInputs";
 import UserCourierModel from "@/store/models/UserCourierModel";
 
@@ -173,7 +177,18 @@ export default class DeliveryMethod extends Vue {
     };
   }
 
+  removeSpaces() {
+    this.user.name = this.user.name.trim();
+    this.user.surname = this.user.surname.trim();
+    this.user.phone = this.user.phone.trim();
+    this.user.street = this.user.street.trim();
+    this.user.homeNumber = this.user.homeNumber.trim();
+    this.user.zipCode = this.user.zipCode.trim();
+    this.user.city = this.user.city.trim();
+  }
+
   handleSubmit() {
+    this.removeSpaces();
     const { isValid, error } = validateCourierInputs(this.user);
 
     if (isValid) {
@@ -205,9 +220,43 @@ export default class DeliveryMethod extends Vue {
       document.documentElement.style.overflow = "hidden";
     } else document.documentElement.style.overflow = "auto";
   }
-  @Watch("user", { deep: true })
-  watchUserData() {
-    console.log("xd");
+
+  //validate inputs on change
+  @Watch("user.name")
+  watchName() {
+    this.error.name = validateName(this.user.name.trim());
+  }
+  @Watch("user.surname")
+  watchSurname() {
+    this.error.surname = validateSurname(this.user.surname.trim());
+  }
+  @Watch("user.street")
+  watchStreet() {
+    this.error.street = validateStreetAndCity(this.user.street.trim());
+  }
+  @Watch("user.city")
+  watchCity() {
+    this.error.city = validateStreetAndCity(this.user.city.trim());
+  }
+  @Watch("user.homeNumber")
+  watchHomeNumber() {
+    this.error.homeNumber = validateHomeNumber(this.user.homeNumber.trim());
+  }
+  @Watch("user.zipCode")
+  watchZipCode() {
+    if (this.user.zipCode.trim().length === 0)
+      this.error.zipCode = "ZipCode cannot be empty";
+    else if (this.user.zipCode.trim().length > 6)
+      this.error.zipCode = "Invalid value";
+    else this.error.zipCode = null;
+  }
+  @Watch("user.phone")
+  watchPhone() {
+    if (this.user.phone.trim().length === 0)
+      this.error.phone = "Phone cannot be empty";
+    else if (this.user.phone.trim().length > 9)
+      this.error.phone = "Invalid value";
+    else this.error.phone = null;
   }
 }
 </script>
@@ -291,7 +340,7 @@ export default class DeliveryMethod extends Vue {
       font-size: 0.8rem;
       color: red;
       font-weight: bold;
-      margin-bottom: 1rem;
+      margin-bottom: 0.5rem;
     }
   }
 }
