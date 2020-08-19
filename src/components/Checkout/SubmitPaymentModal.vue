@@ -2,20 +2,14 @@
   <transition name="fade">
     <Modal>
       <div v-if="!isSubmitted">
-        <div
-          class="bankTransfer"
-          v-if="paymentMethod && paymentMethod.id === BANK_TRANSFER"
-        >
+        <div class="bankTransfer" v-if="paymentMethod && paymentMethod.id === BANK_TRANSFER">
           <h2>Bank Transfer (TODO)</h2>
           <div class="buttons">
             <button @click="cancelPayment">Cancel Payment</button>
             <button @click="handleSubmit">Finish</button>
           </div>
         </div>
-        <div
-          class="blik"
-          v-else-if="paymentMethod && paymentMethod.id === BLIK"
-        >
+        <div class="blik" v-else-if="paymentMethod && paymentMethod.id === BLIK">
           <h2>Blik</h2>
           <input v-model="blik" @keypress="onlyNumber" type="text" />
           <p class="error" v-if="error">{{ error }}</p>
@@ -24,10 +18,7 @@
             <button @click="handleBlikSubmit">Finish</button>
           </div>
         </div>
-        <div
-          class="creditCard"
-          v-else-if="paymentMethod && paymentMethod.id === CREDIT_CARD"
-        >
+        <div class="creditCard" v-else-if="paymentMethod && paymentMethod.id === CREDIT_CARD">
           <VCreditCard @change="creditInfoChanged" />
           <div>
             <p class="error" v-if="cardError.name">{{ cardError.name }}</p>
@@ -63,11 +54,7 @@ import { Vue, Component, Prop } from "vue-property-decorator";
 import Modal from "@/components/Modal.vue";
 import shopCart from "@/store/modules/shopCart";
 import DeliveryModel from "@/store/models/DeliveryModel";
-import {
-  validateBlik,
-  ErrorCard,
-  validateCard
-} from "@/utils/validators/validateCard";
+import { validateBlik, ErrorCard, validateCard } from "@/utils/validators/validateCard";
 import VCreditCard from "v-credit-card";
 import "v-credit-card/dist/VCreditCard.css";
 import { CREDIT_CARD, BANK_TRANSFER, BLIK } from "@/utils/payments";
@@ -104,9 +91,10 @@ export default class SubmitPaymentModal extends Vue {
 
   //Check if input for blik contains only number and exactly 6 digits
   onlyNumber($event) {
-    const keyCode = $event.keyCode ? $event.keyCode : $event.which;
-    if ((keyCode < 48 || keyCode > 57) && keyCode !== 46) {
+    const reg = /^[0-9]*$/;
+    if (!reg.test($event.key)) {
       $event.preventDefault();
+      return;
     }
     if (this.blik.length === 6) $event.preventDefault();
   }
@@ -129,8 +117,7 @@ export default class SubmitPaymentModal extends Vue {
   handleBlikSubmit() {
     this.error = null;
     if (this.blik.trim().length === 0) this.error = "Blik cannot be empty";
-    if (!validateBlik(this.blik.trim()))
-      this.error = "Blik must contain exactly 6 digits";
+    if (!validateBlik(this.blik.trim())) this.error = "Blik must contain exactly 6 digits";
     if (!this.error) {
       this.isSubmitted = true;
     }

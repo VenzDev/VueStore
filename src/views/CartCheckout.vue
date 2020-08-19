@@ -1,18 +1,10 @@
 <template>
   <div class="checkoutContainer">
-    <SubmitPaymentModal
-      v-if="isSubmitModalOpen"
-      :deliveryMethod="deliveryMethod"
-      :handleModal="handleModal"
-    />
+    <SubmitPaymentModal v-if="isSubmitModalOpen" :deliveryMethod="deliveryMethod" :handleModal="handleModal" />
     <div class="userInfoContainer">
       <DeliveryMethod />
       <Payments v-if="userData && deliveryMethod && !isCollectOnDelivery" />
-      <section
-        v-if="
-          userData && deliveryMethod && (paymentMethod || isCollectOnDelivery)
-        "
-      >
+      <section v-if="userData && deliveryMethod && (paymentMethod || isCollectOnDelivery)">
         <button @click="handleModal">
           {{ isCollectOnDelivery ? "Order" : "Order and Pay" }}
         </button>
@@ -80,22 +72,16 @@ export default class CartCheckout extends Vue {
     return shopCart.itemsPrice;
   }
   get totalPrice() {
-    // eslint-disable-next-line
-    return (
-      parseFloat(this.deliveryMethod!.price.substr(1)) + this.itemsPrice
-    ).toFixed(2);
+    if (this.deliveryMethod) return (parseFloat(this.deliveryMethod.price.substr(1)) + this.itemsPrice).toFixed(2);
+    return null;
   }
   get userData() {
     return shopCart.userData;
   }
   //Check if is collect on delivery method selected (payment method is not necessary)
   get isCollectOnDelivery() {
-    if (
-      shopCart.deliveryMethod &&
-      shopCart.deliveryMethod.name === this.COLLECT_ON_DELIVERY
-    )
-      return true;
-    else return false;
+    if (shopCart.deliveryMethod && shopCart.deliveryMethod.name === this.COLLECT_ON_DELIVERY) return true;
+    return false;
   }
   get deliveryMethod() {
     return shopCart.deliveryMethod;

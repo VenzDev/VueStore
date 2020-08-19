@@ -10,22 +10,12 @@
         <div class="inputs">
           <div>
             <p>Name</p>
-            <input
-              :class="{ error: error.name }"
-              v-model="user.name"
-              type="text"
-              placeholder="Name"
-            />
+            <input :class="{ error: error.name }" v-model="user.name" type="text" placeholder="Name" />
             <p v-if="error.name" class="error">{{ error.name }}</p>
           </div>
           <div>
             <p>Surname</p>
-            <input
-              :class="{ error: error.surname }"
-              v-model="user.surname"
-              type="text"
-              placeholder="Surname"
-            />
+            <input :class="{ error: error.surname }" v-model="user.surname" type="text" placeholder="Surname" />
             <p v-if="error.surname" class="error">{{ error.surname }}</p>
           </div>
           <div>
@@ -79,10 +69,12 @@ export default class InStorePickupModal extends Vue {
 
   //Check if input for phone contains only number and max 9 digits
   onlyNumber($event) {
-    const keyCode = $event.keyCode ? $event.keyCode : $event.which;
-    if ((keyCode < 48 || keyCode > 57) && keyCode !== 46) {
+    const reg = /[0-9]/;
+    if (!reg.test($event.key)) {
       $event.preventDefault();
+      return;
     }
+
     if (this.user.phone.length === 9) $event.preventDefault();
   }
 
@@ -139,10 +131,8 @@ export default class InStorePickupModal extends Vue {
   }
   @Watch("user.phone")
   watchPhone() {
-    if (this.user.phone.trim().length === 0)
-      this.error.phone = "Phone cannot be empty";
-    else if (this.user.phone.trim().length > 9)
-      this.error.phone = "Invalid value";
+    if (this.user.phone.trim().length === 0) this.error.phone = "Phone cannot be empty";
+    else if (this.user.phone.trim().length > 9) this.error.phone = "Invalid value";
     else this.error.phone = null;
   }
 }

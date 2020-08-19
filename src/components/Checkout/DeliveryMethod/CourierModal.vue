@@ -6,32 +6,17 @@
         <div class="inputs">
           <div>
             <p>Name</p>
-            <input
-              :class="{ error: error.name }"
-              v-model="user.name"
-              type="text"
-              placeholder="Name"
-            />
+            <input :class="{ error: error.name }" v-model="user.name" type="text" placeholder="Name" />
             <p v-if="error.name" class="error">{{ error.name }}</p>
           </div>
           <div>
             <p>Surname</p>
-            <input
-              :class="{ error: error.surname }"
-              v-model="user.surname"
-              type="text"
-              placeholder="Surname"
-            />
+            <input :class="{ error: error.surname }" v-model="user.surname" type="text" placeholder="Surname" />
             <p v-if="error.surname" class="error">{{ error.surname }}</p>
           </div>
           <div>
             <p>Street</p>
-            <input
-              :class="{ error: error.street }"
-              v-model="user.street"
-              type="text"
-              placeholder="Street"
-            />
+            <input :class="{ error: error.street }" v-model="user.street" type="text" placeholder="Street" />
             <p v-if="error.street" class="error">{{ error.street }}</p>
           </div>
           <div>
@@ -58,12 +43,7 @@
             </div>
             <div class="city_input">
               <p>City</p>
-              <input
-                :class="{ error: error.city }"
-                v-model="user.city"
-                type="text"
-                placeholder="City"
-              />
+              <input :class="{ error: error.city }" v-model="user.city" type="text" placeholder="City" />
             </div>
             <div>
               <p v-if="error.zipCode" class="error">
@@ -103,8 +83,9 @@ import {
   ErrorCourierModel,
   validateName,
   validateSurname,
-  validateStreetAndCity,
-  validateHomeNumber
+  validateHomeNumber,
+  validateStreet,
+  validateCity
 } from "@/utils/validators/validateCourierInputs";
 import UserCourierModel from "@/store/models/UserCourierModel";
 
@@ -135,32 +116,33 @@ export default class DeliveryMethod extends Vue {
   };
 
   //Check if input for zipCode contains only number and exactly 6 characters
+  //Prevent invalid characters from being typed into zipCode input
   //This method add "-" when input have minimum 2 characters
   handleZipCode($event) {
     const eventLength = $event.target.value.length;
-    const keyCode = $event.keyCode ? $event.keyCode : $event.which;
+    const { value } = $event.target;
+    const reg = /[0-9-]/;
 
-    if ((keyCode < 48 || keyCode > 57) && keyCode !== 46) {
+    if (!reg.test($event.key)) {
       $event.preventDefault();
+      return;
     }
+
     if (eventLength == 2) {
-      this.user.zipCode = $event.target.value[0] + $event.target.value[1] + "-";
-    }
-    if (eventLength > 2) {
-      this.user.zipCode =
-        $event.target.value[0] +
-        $event.target.value[1] +
-        "-" +
-        $event.target.value.substring(3, $event.target.value.length);
+      this.user.zipCode = value[0] + value[1] + "-";
+    } else if (eventLength > 2) {
+      this.user.zipCode = value[0] + value[1] + "-" + value.substring(3, value.length);
     }
     if (eventLength === 6) $event.preventDefault();
   }
 
   //Check if input for phone contains only number and exactly 9 digits
+  //Prevent invalid characters from being typed into phone input
   onlyNumber($event) {
-    const keyCode = $event.keyCode ? $event.keyCode : $event.which;
-    if ((keyCode < 48 || keyCode > 57) && keyCode !== 46) {
+    const reg = /[0-9]/;
+    if (!reg.test($event.key)) {
       $event.preventDefault();
+      return;
     }
     if (this.user.phone.length === 9) $event.preventDefault();
   }
@@ -232,11 +214,11 @@ export default class DeliveryMethod extends Vue {
   }
   @Watch("user.street")
   watchStreet() {
-    this.error.street = validateStreetAndCity(this.user.street.trim());
+    this.error.street = validateStreet(this.user.street.trim());
   }
   @Watch("user.city")
   watchCity() {
-    this.error.city = validateStreetAndCity(this.user.city.trim());
+    this.error.city = validateCity(this.user.city.trim());
   }
   @Watch("user.homeNumber")
   watchHomeNumber() {
@@ -244,18 +226,14 @@ export default class DeliveryMethod extends Vue {
   }
   @Watch("user.zipCode")
   watchZipCode() {
-    if (this.user.zipCode.trim().length === 0)
-      this.error.zipCode = "ZipCode cannot be empty";
-    else if (this.user.zipCode.trim().length > 6)
-      this.error.zipCode = "Invalid value";
+    if (this.user.zipCode.trim().length === 0) this.error.zipCode = "ZipCode cannot be empty";
+    else if (this.user.zipCode.trim().length > 6) this.error.zipCode = "Invalid value";
     else this.error.zipCode = null;
   }
   @Watch("user.phone")
   watchPhone() {
-    if (this.user.phone.trim().length === 0)
-      this.error.phone = "Phone cannot be empty";
-    else if (this.user.phone.trim().length > 9)
-      this.error.phone = "Invalid value";
+    if (this.user.phone.trim().length === 0) this.error.phone = "Phone cannot be empty";
+    else if (this.user.phone.trim().length > 9) this.error.phone = "Invalid value";
     else this.error.phone = null;
   }
 }

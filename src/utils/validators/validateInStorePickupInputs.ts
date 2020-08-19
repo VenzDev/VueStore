@@ -1,4 +1,5 @@
 import UserInStoreModel from "@/store/models/UserInStoreModel";
+import validate from "./validateFunction";
 
 export interface ErrorInStorePickupModel {
   name: string | null;
@@ -7,36 +8,14 @@ export interface ErrorInStorePickupModel {
 }
 
 const phoneReg = new RegExp("[0-9]{9}");
-const nameReg = new RegExp(
-  "^[A-Za-zżźćńółęąśŻŹĆĄŚĘŁÓŃ][A-Za-zżźćńółęąśŻŹĆĄŚĘŁÓŃ'. -]{0,19}$"
-);
-const surnameReg = new RegExp(
-  "^[A-Za-zżźćńółęąśŻŹĆĄŚĘŁÓŃ][A-Za-zżźćńółęąśŻŹĆĄŚĘŁÓŃ'. -]{0,39}$"
-);
+const nameReg = new RegExp("^[A-Za-zżźćńółęąśŻŹĆĄŚĘŁÓŃ][A-Za-zżźćńółęąśŻŹĆĄŚĘŁÓŃ'. -]{0,19}$");
+const surnameReg = new RegExp("^[A-Za-zżźćńółęąśŻŹĆĄŚĘŁÓŃ][A-Za-zżźćńółęąśŻŹĆĄŚĘŁÓŃ'. -]{0,39}$");
 
-export const validatePhone = (phoneNumber: string) => {
-  let error: string | null = null;
-  if (!phoneReg.test(phoneNumber)) error = "Invalid value";
-  if (phoneNumber.length === 0) error = "Input cannot be empty";
-  if (phoneNumber.length > 9) error = "Too long value";
-  return error;
-};
+export const validatePhone = (phoneNumber: string) => validate(phoneReg, phoneNumber, 9, "Phone number");
 
-export const validateName = (text: string) => {
-  let error: string | null = null;
-  if (!nameReg.test(text)) error = "Invalid value";
-  if (text.length === 0) error = "Input cannot be empty";
-  if (text.length > 20) error = "Too long value";
-  return error;
-};
+export const validateName = (name: string) => validate(nameReg, name, 20, "Name");
 
-export const validateSurname = (text: string) => {
-  let error: string | null = null;
-  if (!surnameReg.test(text)) error = "Invalid value";
-  if (text.length === 0) error = "Input cannot be empty";
-  if (text.length > 40) error = "Too long value";
-  return error;
-};
+export const validateSurname = (surname: string) => validate(surnameReg, surname, 40, "Surname");
 
 export const validateInStorePickupInputs = (userInputs: UserInStoreModel) => {
   const error: ErrorInStorePickupModel = {
