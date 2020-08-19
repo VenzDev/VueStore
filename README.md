@@ -1,27 +1,12 @@
 # vue-store
-
+## description
+### Simple store written in Vue with Typescript
 ## demo 
 ## https://pedantic-goldberg-ab4e5f.netlify.app/
 
-## Project setup
-```
-npm install
-```
-
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
-
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+## Features
+### :heavy_check_mark: Shop cart
+### :heavy_check_mark: Typescript
+### :heavy_check_mark: Vuex
+### :heavy_check_mark: Real credit card validation
+### :heavy_check_mark: LocalStorage for items in shop cart 
